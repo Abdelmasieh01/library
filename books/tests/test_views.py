@@ -114,5 +114,15 @@ class BorrowingTestCase(TestCase):
         self.assertEqual(book1.name, 'test_test1')
         self.assertEqual(book1.author, 'test_testing')
         self.assertEqual(book1.copies, 10)
-
+    
+    def test_search(self):
+        Book.objects.create(category=200, code=3, name='اختبار', author='testing', copies=5)
+        Book.objects.create(category=200, code=4, name='test', author='أختبار', copies=5)
+        #Data for the form
+        data = {
+            'search': 'اخت',
+        }
+        response = self.client.post(reverse('books:search'), data, follow=True)
+        self.assertEqual(response.context['books'].count(), 1)
+        self.assertEqual(response.context['books_author'].count(), 1)
 
