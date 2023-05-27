@@ -11,7 +11,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = [
     'localhost',
-
+    'st-peter-lib.onrender.com',
 ]
 
 
@@ -153,3 +153,6 @@ FIXTURES_DIRS = [
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+#CSRF Setting
+CSRF_TRUSTED_ORIGINS = ['https://st-peter-lib.onrender.com']
