@@ -27,9 +27,9 @@ def index(request):
 
 def search(request):
     keyword = request.POST.get('search', '')
-    keyword_var1 = keyword.replace('أ', 'ا')
+    keyword_var1 = keyword.replace('ا', 'أ')
     keyword_var2 = keyword.replace('ى', 'ي')
-    keyword_var3 = keyword_var2.replace('أ', 'ا')
+    keyword_var3 = keyword_var2.replace('ا', 'أ')
     books = Book.objects.filter(Q(name__icontains=keyword) | Q(name__icontains=keyword_var1) | Q(
         name__icontains=keyword_var2) | Q(name__icontains=keyword_var3)).order_by('category', 'code')
     books_author = Book.objects.filter(Q(author__icontains=keyword) | Q(author__icontains=keyword_var1) | Q(
