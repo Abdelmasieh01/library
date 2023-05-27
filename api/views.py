@@ -8,26 +8,33 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 
-class BookAPIView(generics.ListAPIView):   
+
+class BookAPIView(generics.ListAPIView):
     serializer_class = BookSerializer
 
     def get_queryset(self):
         queryset = Book.objects.all().order_by('category', 'code')
         search = self.request.query_params.get('search')
         if search is not None:
-            queryset = queryset.filter(Q(name__icontains=search) | Q(author__icontains=search))
+            search_var1 = search.replace('ا', 'أ')
+            search_var2 = search.replace('ي', 'ى')
+            search_var3 = search_var2.replace('ا', 'أ')
+            queryset = queryset.filter(Q(name__icontains=search) | Q(
+                author__icontains=search) | Q(name__icontains=search_var1) | Q(author__icontains=search_var1) | Q(name__icontains=search_var2) | Q(author__icontains=search_var2) | Q(name__icontains=search_var3) | Q(author__icontains=search_var3))
 
         category = self.request.query_params.get('category')
         if category is not None:
             queryset = queryset.filter(category=int(category))
-        
+
         return queryset
+
 
 class PostAPIView(generics.ListAPIView):
     queryset = Post.objects.all().order_by('-timestamp')
     serializer_class = PostSerializer
     filter_backends = [filters.SearchFilter]
     search_fields = ['title', 'profile__name']
+
 
 @api_view(['GET'])
 def get_profile(request):
@@ -41,4 +48,3 @@ def get_profile(request):
             return Response(status=status.HTTP_404_NOT_FOUND)
     else:
         return Response(status=status.HTTP_404_NOT_FOUND)
-
