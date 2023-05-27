@@ -1,0 +1,58 @@
+{% extends 'books/search.html' %}
+{% block stylesheets %}
+{% endblock %}
+
+{% block header %}
+{% endblock %}
+
+{% block search %}
+<div class="container">
+    <div class="row gtr-150">
+        <div class="col-6 col-12-medium" style="display: flex; justify-content: center;">
+            <a class="button" href="{% url 'books:create-book' %}">إضافة كتاب جديد</a>
+        </div>
+        <div class="col-6 col-12-medium" style="display: flex; justify-content: center;">
+            <a class="button active" href="{% url 'books:edit-book' %}">تعديل بيانات كتاب موجود</a>
+        </div>
+    </div>
+</div>
+<br/>
+{% block content %}
+<div class="container">
+    <div class="row" style="display: flex; justify-content: center;">
+        <form method="post">{% csrf_token %}
+            {% if error %}
+            <h2 style="color:red;">يوجد خطأ في الرقم العام او الخاص للكتاب!</h2>
+            {% endif %}
+            {% if not form %}
+            <label for="category">اكتب الرقم العام للكتاب:</label>
+            <input name="category" type="number" min="200" placeholder="الرقم العام">
+            <label for="code">اكتب الرقم الخاص للكتاب:</label>
+            <input name="code" type="number" min="1" placeholder="الرقم الخاص">
+            <br>
+            <input type="submit" value="إدخال" style="margin-top: 15px;">
+            {% else %}
+            {{ form.as_p }}
+            <input type="submit" value="حفظ" style="margin-top: 15px;">
+            {% endif %}
+        </form>
+    </div>
+</div>
+{% endblock %}
+{% endblock %}
+
+{% block active %}
+<li><a class="anav" href="{% url 'books:index' %}">الرئيسية</a></li>
+<li><a class="anav" href="{% url 'books:search' %}">البحث</a></li>
+<li><a class="anav" href="{% url 'posts:posts' %}">المشاركات</a></li>
+<li><a class="anav" href="{% url 'books:create-borrower' %}">الاستعارة</a></li>
+<li><a class="active anav" href="{% url 'books:create-book' %}">الكتب</a></li>
+{% endblock %}
+
+
+
+{% block scripts %}
+{% endblock %}
+
+{% block index-only %}
+{% endblock %}

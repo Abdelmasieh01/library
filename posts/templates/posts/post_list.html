@@ -1,0 +1,59 @@
+{% extends 'books/search.html' %}
+{% load post_extras %}
+
+{% block active %}
+<li><a class="anav" href="{% url 'books:index' %}">الرئيسية</a></li>
+<li><a class="anav" href="{% url 'books:search' %}">البحث</a></li>
+<li><a class="active anav" href="{% url 'posts:posts' %}">المشاركات</a></li>
+{% if user.is_authenticated %}
+<li><a class="anav" href="{% url 'books:create-borrower' %}">الاستعارة</a></li>
+<li><a class="anav" href="{% url 'books:create-book' %}">الكتب</a></li>
+{% endif %}
+{% endblock %}
+
+
+{% block search %}
+<div class="container">
+    <div class="row" style="display: flex; flex-direction: row; align-items: center; justify-content: center;">
+        <form method="POST" action="{% url 'posts:search' %}">
+            {% csrf_token %}
+            <div
+                style="display: flex; flex-direction: row; align-items: stretch;">
+                {% block search_input %}
+                <input type="text" placeholder="بحث.." name="search" value="{{ keyword }}"
+                    style="margin-left: 5px; align-self: stretch;">
+                {% endblock %}
+                <button type="submit" style="display: inline; align-self: stretch; border-radius: 4px; height: 2.75em;"><i class="fa fa-search"></i></button>
+            </div>
+        </form>
+    </div>
+</div>
+{% block content %}
+<div class="container py-3">
+    <div class="row">
+        {% for post in posts %}
+        <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3 p-2" style="display: flex; justify-content: center;">
+            <div class="card" style="width: 18rem;">
+                {% if post.image %}
+                <img class="card-img-top" height=" 150px;" src="{{ post.image }}" alt="Card image cap">
+                {% else %}
+                {% endif %}
+                <div class="card-body">
+                    <h5 class="card-title">{{ post.title }}</h5>
+                    <p class="card-text">{{ post.text | index }}...</p>
+                    <a class="link" href="{% url 'posts:details' post.id %}" class="card-link">متابعة القراءة</a>
+                    <hr />
+                    <div class="text" styke="display:inline;">
+                        <a class="link" href="{% url 'posts:profile-posts' post.profile.id %}"><h5 class="card-title" style="display: inline;">بقلم: {{ post.profile.name }}</h5></a>
+                        <br>
+                        <p style="display: inline; text-align: center;">بتاريخ: {{ post.timestamp | date:"d-m-Y" }}</p>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
+{% endblock %}
