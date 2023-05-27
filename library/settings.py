@@ -7,7 +7,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = config('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = [
     'localhost',
@@ -21,6 +21,7 @@ INSTALLED_APPS = [
     #My_apps
     'books',
     'posts',
+    'api',
     #django rest framework
     'rest_framework',
     #django apps
@@ -133,6 +134,12 @@ STORAGES = {
     'staticfiles': {
         'BACKEND': 'whitenoise.storage.CompressedStaticFilesStorage',
     },
+}
+
+#Rest API pagination settings
+REST_FRAMEWORK = {
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 15
 }
 
 MEDIA_ROOT = 'media/'
