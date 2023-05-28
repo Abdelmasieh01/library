@@ -8,9 +8,10 @@ class BookSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class PostSerializer(serializers.ModelSerializer):
+    profile_name = serializers.CharField(source='profile.name', read_only=True)
     class Meta:
         model = Post
-        fields = '__all__'
+        fields = ('id', 'profile', 'title', 'text', 'image', 'profile_name', 'timestamp', 'book',)
 
 class ProfileSerializer(serializers.ModelSerializer):
     class Meta:
