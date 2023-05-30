@@ -137,10 +137,12 @@ STORAGES = {
 }
 
 #Rest API pagination settings
+
 REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
-    'PAGE_SIZE': 15
+    'PAGE_SIZE': 15,
 }
+
 
 MEDIA_ROOT = 'media/'
 MEDIA_URL = 'media/'

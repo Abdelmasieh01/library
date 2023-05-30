@@ -7,10 +7,18 @@ from rest_framework import filters
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
+from rest_framework.pagination import PageNumberPagination
 
+class ZeroIndexedPagePagination(PageNumberPagination):
+    page_size = 5
+
+    def get_page_number(self, request, paginator):
+        page_number =  super().get_page_number(request, paginator)
+        return int(page_number) + 1
 
 class BookAPIView(generics.ListAPIView):
     serializer_class = BookSerializer
+    pagination_class = ZeroIndexedPagePagination
 
     def get_queryset(self):
         queryset = Book.objects.all().order_by('category', 'code')
@@ -30,6 +38,7 @@ class BookAPIView(generics.ListAPIView):
 
 
 class PostAPIView(generics.ListAPIView):
+    pagination_class = ZeroIndexedPagePagination
     queryset = Post.objects.all().order_by('-timestamp')
     serializer_class = PostSerializer
     filter_backends = [filters.SearchFilter]
