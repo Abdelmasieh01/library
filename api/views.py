@@ -34,7 +34,7 @@ class BookListAPIView(generics.ListAPIView):
                 author__icontains=search) | Q(name__icontains=search_var1) | Q(author__icontains=search_var1) | Q(name__icontains=search_var2) | Q(author__icontains=search_var2) | Q(name__icontains=search_var3) | Q(author__icontains=search_var3))
 
         category = self.request.query_params.get('category')
-        if category is not None:
+        if category is not None and category != "":
             queryset = queryset.filter(category=int(category))
 
         return queryset
