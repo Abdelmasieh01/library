@@ -1,9 +1,10 @@
 from django.test import TestCase
 from django.urls import reverse
 from django.contrib.auth.models import User
+from datetime import datetime
 from http import HTTPStatus
 
-from books.models import Book, Borrower
+from books.models import Book, Borrower, Borrowing
 class BorrowingTestCase(TestCase):
     def setUp(self):
         Book.objects.create(category=200, code=1, name='test1', author='testing', copies=5)
@@ -50,11 +51,31 @@ class BorrowingTestCase(TestCase):
         book2 = Book.objects.get(category=200, code=2,)
         self.assertFalse(book2.available)
 
-        #Testing to borrow book test2 when out of stock to give error 403 forbidden
+        #Testing to borrow book test2 when out of stock to give error 406 Not Acceptable
         response = self.client.post(reverse('books:create-borrowing'), data, follow=True)
-        self.assertEqual(response.status_code, HTTPStatus.FORBIDDEN)
+        self.assertEqual(response.status_code, HTTPStatus.NOT_ACCEPTABLE)
+
+        #Testing bad request
+        data = {
+            'not_valid_field_name': 'not_valid_data'
+        }
+        response = self.client.post(reverse('books:create-borrowing'), data, follow=True)
+        self.assertEqual(response.status_code, HTTPStatus.BAD_REQUEST)
+
+        #Testing if book is added in borrower.books
+        borrower = Borrower.objects.get(pk=1)
+        book1 = Book.objects.get(pk=1)
+        book1 = Book.objects.get(pk=2)
+        self.assertTrue(borrower.books.contains(book1))
+        self.assertTrue(borrower.books.contains(book2))
     
     def test_return_book(self):
+        borrower = Borrower.objects.get(pk=1)
+        book1 = Book.objects.get(pk=1)
+        book2 = Book.objects.get(pk=2)
+        Borrowing.objects.create(borrower=borrower, book=book1, borrow_date='2023-05-25')
+        Borrowing.objects.create(borrower=borrower, book=book2, borrow_date='2023-05-25')
+
         #Logging in to get status code 200
         self.client.login(username='testuser1', password='1X<ISRUkw+tuK')
         response = self.client.get(reverse('books:return-book'))
@@ -62,19 +83,29 @@ class BorrowingTestCase(TestCase):
         #Data for the form
         data = {
             'borrowing': 1,
-            'borrow_date': '2023-05-26',
+            'return_date': '2023-05-26',
         }
 
         response = self.client.post(reverse('books:return-book'), data, follow=True)
         self.assertEqual(response.status_code, HTTPStatus.OK)
         book1 = Book.objects.get(category=200, code=1,)
         self.assertEqual(book1.copies, 5)
+        #Testing return date and returned attributes
+        borrowing = Borrowing.objects.get(borrower=borrower, book=book1, borrow_date='2023-05-25')
+        self.assertTrue(borrowing.returned)
 
         data['borrowing'] = 2
         response = self.client.post(reverse('books:return-book'), data, follow=True)
         self.assertEqual(response.status_code, HTTPStatus.OK)
         book2 = Book.objects.get(category=200, code=2,)
         self.assertTrue(book2.available)
+
+        #Testing if book is removed from borrower.books
+        borrower = Borrower.objects.get(pk=1)
+        book1 = Book.objects.get(pk=1)
+        book1 = Book.objects.get(pk=2)
+        self.assertFalse(borrower.books.contains(book1))
+        self.assertFalse(borrower.books.contains(book2))
     
     def test_edit_book(self):
         #Logging in to get status code 200

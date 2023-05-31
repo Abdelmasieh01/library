@@ -67,10 +67,18 @@ class Borrowing(models.Model):
     def __str__(self):
         return self.borrower.name + ': ' + self.book.name
     
-    def borrow(self):
-        self.book.copies -= 1
-        self.book.save()
-        if self.book.copies == 0:
-            self.book.available = False
+    def save(self, *args, **kwargs):
+        if self.returned == False:
+            self.book.copies -= 1
+            self.book.available = (self.book.copies > 0)
+            self.borrower.books.add(self.book)
             self.book.save()
+            
+        else:
+            self.book.copies += 1
+            self.book.available = True
+            self.borrower.books.remove(self.book)
+            self.book.save()
+
+        super(Borrowing, self).save(*args, **kwargs)
     

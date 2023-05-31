@@ -66,14 +66,12 @@ def create_borrowing(request):
             borrower = form.cleaned_data['borrower']
             date = form.cleaned_data['borrow_date']
             if book.copies > 0:
-                borrowing = Borrowing.objects.create(
-                    borrower=borrower, borrow_date=date, book=book)
-                borrowing.borrow()
-                borrower.books.add(book)
-                borrower.save()
+                borrowing = Borrowing(borrower=borrower, borrow_date=date, book=book)
+                borrowing.save()
             else:
                 error = True
-                return render(request, 'books/borrowing_form.html', {'form': form, 'error': error}, status=HTTPStatus.FORBIDDEN)
+                return render(request, 'books/borrowing_form.html', {'form': form, 'error': error}, status=HTTPStatus.NOT_ACCEPTABLE)
+            
             return redirect('books:create-borrowing')
         else:
             error = True
@@ -89,19 +87,19 @@ def return_book(request):
     if request.method == 'POST':
         form = ReturnForm(request.POST)
         if form.is_valid():
-            borrowing = Borrowing.objects.get(
-                pk=request.POST.get('borrowing', ''))
-            borrowing.borrower.books.remove(borrowing.book)
+            borrowing = form.cleaned_data['borrowing']
             borrowing.return_date = form.cleaned_data['return_date']
             borrowing.returned = True
-            borrowing.book.copies += 1
-            borrowing.book.available = True
-            borrowing.book.save()
             borrowing.save()
             return redirect('books:return-book')
+        else: 
+            error = True
+            return render(request, 'books/return_book.html', {'form': form, 'error': error}, status=HTTPStatus.NOT_ACCEPTABLE)
+            
 
+    error = False
     form = ReturnForm()
-    return render(request, 'books/return_book.html', {'form': form})
+    return render(request, 'books/return_book.html', {'form': form, 'error': error})
 
 
 class BookCreateView(LoginRequiredMixin, CreateView):
