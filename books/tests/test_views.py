@@ -120,8 +120,9 @@ class BorrowingTestCase(TestCase):
         }
         response = self.client.post(reverse('books:edit-book'), data, follow=True)
         self.assertEqual(response.status_code, HTTPStatus.OK)
+        self.assertEqual(response.url, reverse('books:edit-book-details', 1))
 
-        #Testo 404 Not Found
+        #Test 404 Not Found
         data['code']
         response = self.client.post(reverse('books:edit-book'), data, follow=True)
         self.assertEqual(response.status_code, HTTPStatus.NOT_FOUND)

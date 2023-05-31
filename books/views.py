@@ -96,7 +96,6 @@ def return_book(request):
             error = True
             return render(request, 'books/return_book.html', {'form': form, 'error': error}, status=HTTPStatus.NOT_ACCEPTABLE)
             
-
     error = False
     form = ReturnForm()
     return render(request, 'books/return_book.html', {'form': form, 'error': error})
