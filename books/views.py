@@ -10,18 +10,7 @@ from .forms import BorrowerForm, BorrowingForm, ReturnForm, BookForm, BookUpdate
 
 
 def index(request):
-    categories = [
-        (200, 'منوعات'),
-        (300, 'الأسرة'),
-        (400, 'الشباب'),
-        (500, 'الخدمة'),
-        (600, 'اللاهوت الروحي'),
-        (700, 'تاريخ الكنيسة وسير الآباء'),
-        (800, 'اللاهوت الطقسي'),
-        (900, 'اللاهوت العقائدي'),
-        (1000, 'الكتاب المقدس'),
-        (2000, 'الموسوعات'),
-        (3000, 'المجلدات'),]
+    categories = Book.CHOICES
     return render(request, 'books/index.html', {'categories': categories})
 
 
