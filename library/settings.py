@@ -24,6 +24,8 @@ INSTALLED_APPS = [
     'api',
     #django rest framework
     'rest_framework',
+    #CORS headers for APIs
+    "corsheaders",
     #django apps
     'django.contrib.admin',
     'django.contrib.auth',
@@ -37,6 +39,8 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    #CORS headers middleware
+    "corsheaders.middleware.CorsMiddleware",
     #whitenoise
     'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -143,10 +147,6 @@ REST_FRAMEWORK = {
     'PAGE_SIZE': 15,
 }
 
-
-MEDIA_ROOT = 'media/'
-MEDIA_URL = 'media/'
-
 FIXTURES_DIRS = [
     BASE_DIR / 'fixtures',
 ]
@@ -158,3 +158,9 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 #CSRF Setting
 CSRF_TRUSTED_ORIGINS = ['https://st-peter-lib.onrender.com']
+
+#CORS Settings
+CORS_ALLOWED_ORIGINS = [
+    'https://st-peter-library.flutterflow.app',
+    'http://localhost:8080',
+]

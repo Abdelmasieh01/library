@@ -12,7 +12,7 @@ from rest_framework.pagination import PageNumberPagination
 
 
 class ZeroIndexedPagePagination(PageNumberPagination):
-    page_size = 5
+    page_size = 10
 
     def get_page_number(self, request, paginator):
         page_number = super().get_page_number(request, paginator)
