@@ -1,7 +1,8 @@
 from .serializers import BookSerializer, PostSerializer, ProfileSerializer
 from books.models import Book
 from posts.models import Post, Profile
-from django.db.models import Q
+from django.db.models import Q,  CharField, Value
+from django.db.models.functions import Concat
 from rest_framework import generics
 from rest_framework import filters
 from rest_framework import status
@@ -39,12 +40,23 @@ class BookListAPIView(generics.ListAPIView):
 
         return queryset
 
+
 class PostAPIView(generics.ListAPIView):
     pagination_class = ZeroIndexedPagePagination
-    queryset = Post.objects.all().order_by('-timestamp')
     serializer_class = PostSerializer
-    filter_backends = [filters.SearchFilter]
-    search_fields = ['title', 'profile__name']
+
+    def get_queryset(self):
+        queryset = Post.objects.all().order_by('-timestamp')
+        search = self.request.query_params.get('search')
+    
+        if search is not None and search != "":
+            queryset = queryset.annotate(
+                    name=Concat(
+                    'profile__user__first_name',
+                    Value(' '),
+                    'profile__user__last_name',
+                    output_field=CharField())).filter(Q(name__icontains=search))
+        return queryset
 
 
 @api_view(['GEt'])
