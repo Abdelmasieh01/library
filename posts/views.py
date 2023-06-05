@@ -1,6 +1,7 @@
 from typing import Any, Dict
 from django.shortcuts import render, get_object_or_404
-from django.db.models import Q
+from django.db.models import Q, CharField, Value
+from django.db.models.functions import Concat
 from django.views.generic.list import ListView
 from django.views.generic.detail import DetailView
 from .models import Post, Profile
@@ -16,7 +17,12 @@ def search_posts(request):
     keyword = ''
     if request.method == 'POST':
         keyword = request.POST.get('search', '')
-        posts = Post.objects.filter(Q(title__icontains=keyword) | Q(text__icontains=keyword) | Q(profile__name__icontains=keyword)).order_by('-timestamp')
+        posts = Post.objects.annotate(
+            name=Concat(
+                'profile__user__first_name',
+                Value(' '),
+                'profile__user__last_name',
+                output_field=CharField())).filter(Q(title__icontains=keyword) | Q(text__icontains=keyword) | Q(name__icontains=keyword)).order_by('-timestamp')
         return render(request, 'posts/post_list.html', {'posts': posts, 'keyword': keyword})
     posts = Post.objects.all().order_by('-timestamp')[:12]
     return render(request, 'posts/post_list.html', {'posts': posts, 'keyword': keyword})
@@ -34,4 +40,4 @@ class PostDetailView(DetailView):
 def posts_by_profile(request, pk=1):
     profile = get_object_or_404(Profile, pk=pk)
     posts = Post.objects.filter(profile=profile).order_by('-timestamp')
-    return render(request, 'posts/post_list.html', {'posts': posts, 'keyword': profile.name})
+    return render(request, 'posts/post_list.html', {'posts': posts, 'keyword': profile.__str__})

@@ -44,7 +44,7 @@
                     <a class="link" href="{% url 'posts:details' post.id %}" class="card-link">متابعة القراءة</a>
                     <hr />
                     <div class="text" styke="display:inline;">
-                        <a class="link" href="{% url 'posts:profile-posts' post.profile.id %}"><h5 class="card-title" style="display: inline;">بقلم: {{ post.profile.name }}</h5></a>
+                        <a class="link" href="{% url 'posts:profile-posts' post.profile.id %}"><h5 class="card-title" style="display: inline;">بقلم: {{ post.profile }}</h5></a>
                         <br>
                         <p style="display: inline; text-align: center;">بتاريخ: {{ post.timestamp | date:"d-m-Y" }}</p>
                     </div>
