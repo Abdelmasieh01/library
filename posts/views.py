@@ -1,4 +1,5 @@
 from typing import Any, Dict
+from django.db.models.query import QuerySet
 from django.shortcuts import render, get_object_or_404
 from django.db.models import Q, CharField, Value
 from django.db.models.functions import Concat
@@ -12,6 +13,9 @@ class PostListView(ListView):
     paginate_by = 12
     ordering = '-timestamp'
     context_object_name = 'posts'
+
+    def get_queryset(self) -> QuerySet[Any]:
+        return super().get_queryset().filter(approved=True)
 
 def search_posts(request):
     keyword = ''
