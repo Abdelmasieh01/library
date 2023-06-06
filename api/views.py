@@ -59,7 +59,7 @@ class PostAPIView(generics.ListAPIView):
         return queryset
 
 
-@api_view(['GEt'])
+@api_view(['GET'])
 def get_book(request):
     if request.query_params:
         pk = request.query_params.get('pk')

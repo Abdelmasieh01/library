@@ -24,6 +24,9 @@ INSTALLED_APPS = [
     'api',
     #django rest framework
     'rest_framework',
+    'rest_framework.authtoken',
+    #django rest authentication
+    'dj_rest_auth',
     #CORS headers for APIs
     "corsheaders",
     #django apps
