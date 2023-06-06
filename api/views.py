@@ -60,7 +60,7 @@ class PostAPIView(generics.ListAPIView):
         return queryset
 
 class PostCreateAPIView(generics.CreateAPIView):
-    permission_classes = permissions.IsAuthenticated
+    permission_classes = [permissions.IsAuthenticated,]
     serializer_class = PostSerializer
 
 @api_view(['GET'])
