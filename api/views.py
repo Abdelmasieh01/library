@@ -8,7 +8,7 @@ from rest_framework import filters
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
-from rest_framework.views import APIView
+from rest_framework.viewsets import ViewSet
 from rest_framework.pagination import PageNumberPagination
 
 
@@ -58,34 +58,8 @@ class PostAPIView(generics.ListAPIView):
                     output_field=CharField())).filter(Q(name__icontains=search))
         return queryset
 
-
-@api_view(['GET'])
-def get_book(request):
-    if request.query_params:
-        pk = request.query_params.get('pk')
-        try:
-            book = Book.objects.get(pk=int(pk))
-            item = BookSerializer(book)
-            return Response(item.data, status=status.HTTP_200_OK)
-        except:
-            return Response(status=status.HTTP_404_NOT_FOUND)
-    else:
-        return Response(status=status.HTTP_404_NOT_FOUND)
-
-
-@api_view(['GET'])
-def get_post(request):
-    if request.query_params:
-        pk = request.query_params.get('pk')
-        try:
-            post = Post.objects.get(pk=int(pk))
-            item = PostSerializer(post)
-            return Response(item.data, status=status.HTTP_200_OK)
-        except:
-            return Response(status=status.HTTP_404_NOT_FOUND)
-    else:
-        return Response(status=status.HTTP_404_NOT_FOUND)
-
+class PostCreateAPIView(generics.CreateAPIView):
+    serializer_class = PostSerializer
 
 @api_view(['GET'])
 def get_profile(request):

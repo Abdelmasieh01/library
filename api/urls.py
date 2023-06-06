@@ -6,8 +6,7 @@ app_name = 'api'
 urlpatterns = [
     path('books/', views.BookListAPIView.as_view(), name='books'),
     path('posts/', views.PostAPIView.as_view(), name='posts'),
-    path('book/', views.get_book, name='book'),
-    path('post/', views.get_post, name='post'),
     path('profile/', views.get_profile, name='profile'),
-    path('my-profile/', views.my_profile, name='my-profile')
+    path('my-profile/', views.my_profile, name='my-profile'),
+    path('create-post/', views.PostCreateAPIView.as_view(), name='create-post'),
 ]
