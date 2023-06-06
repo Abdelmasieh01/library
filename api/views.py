@@ -91,11 +91,20 @@ def get_post(request):
 def get_profile(request):
     if request.query_params:
         pk = request.query_params.get('pk')
-        try:
-            profile = Profile.objects.get(pk=int(pk))
-            item = ProfileSerializer(profile)
-            return Response(item.data, status=status.HTTP_200_OK)
-        except:
-            return Response(status=status.HTTP_404_NOT_FOUND)
+        if pk is not None and pk != "":
+            try:
+                profile = Profile.objects.get(pk=int(pk))
+                item = ProfileSerializer(profile)
+                return Response(item.data, status=status.HTTP_200_OK)
+            except:
+                return Response(status=status.HTTP_404_NOT_FOUND)
+        else:
+            user = request.query_params.get('user')
+            try: 
+                profile = Profile.objects.get(user=int(user))
+                item = ProfileSerializer(profile)
+                return Response(item.data, status=status.HTTP_200_OK)
+            except:
+                return Response(status=status.HTTP_404_NOT_FOUND)
     else:
         return Response(status=status.HTTP_404_NOT_FOUND)
