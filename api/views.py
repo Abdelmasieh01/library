@@ -108,3 +108,15 @@ def get_profile(request):
                 return Response(status=status.HTTP_404_NOT_FOUND)
     else:
         return Response(status=status.HTTP_404_NOT_FOUND)
+
+@api_view(['GET'])
+def my_profile(request):
+    if request.user.is_authenticated:
+        try:
+            profile = Profile.objects.get(user=request.user)
+            item = ProfileSerializer(profile)
+            return Response(item.data, status=status.HTTP_200_OK)
+        except:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+    else:
+        return Response(status=status.HTTP_404_NOT_FOUND)

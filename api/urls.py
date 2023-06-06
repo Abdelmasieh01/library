@@ -9,4 +9,5 @@ urlpatterns = [
     path('book/', views.get_book, name='book'),
     path('post/', views.get_post, name='post'),
     path('profile/', views.get_profile, name='profile'),
+    path('my-profile/', views.my_profile, name='my-profile')
 ]
