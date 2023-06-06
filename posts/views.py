@@ -17,14 +17,14 @@ def search_posts(request):
     keyword = ''
     if request.method == 'POST':
         keyword = request.POST.get('search', '')
-        posts = Post.objects.annotate(
+        posts = Post.objects.filter(approved=True).annotate(
             name=Concat(
                 'profile__user__first_name',
                 Value(' '),
                 'profile__user__last_name',
                 output_field=CharField())).filter(Q(title__icontains=keyword) | Q(text__icontains=keyword) | Q(name__icontains=keyword)).order_by('-timestamp')
         return render(request, 'posts/post_list.html', {'posts': posts, 'keyword': keyword})
-    posts = Post.objects.all().order_by('-timestamp')[:12]
+    posts = Post.objects.filter(approved=True).order_by('-timestamp')[:12]
     return render(request, 'posts/post_list.html', {'posts': posts, 'keyword': keyword})
 
 class PostDetailView(DetailView):

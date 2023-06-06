@@ -48,7 +48,7 @@
                 <ul class="list-unstyled">
                     {% for post in posts %}
                     <li class="media py-2 row">
-                        <a href="{% url 'posts:details' post.id %}"><img class="d-flex mr-3 img-fluid" width="64" src="/media/{{ post.image }}" alt="Generic placeholder image"></a>
+                        <a href="{% url 'posts:details' post.id %}"><img class="d-flex mr-3 img-fluid" width="64" src="{{ post.image }}" alt="Generic placeholder image"></a>
                         <div class="media-body">
                             <h5 class="mt-0 mb-1"><a href="{% url 'posts:details' post.id %}">{{ post.title }}</a></h5> {{ post.timestamp|date:'d-m-Y' }}
                         </div>

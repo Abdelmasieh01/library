@@ -6,6 +6,7 @@ from django.db.models.functions import Concat
 from rest_framework import generics
 from rest_framework import filters
 from rest_framework import status
+from rest_framework import permissions
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from rest_framework.viewsets import ViewSet
@@ -46,7 +47,7 @@ class PostAPIView(generics.ListAPIView):
     serializer_class = PostSerializer
 
     def get_queryset(self):
-        queryset = Post.objects.all().order_by('-timestamp')
+        queryset = Post.objects.filter(approved=True).order_by('-timestamp')
         search = self.request.query_params.get('search')
     
         if search is not None and search != "":
@@ -59,6 +60,7 @@ class PostAPIView(generics.ListAPIView):
         return queryset
 
 class PostCreateAPIView(generics.CreateAPIView):
+    permission_classes = permissions.IsAuthenticated
     serializer_class = PostSerializer
 
 @api_view(['GET'])
