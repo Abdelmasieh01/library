@@ -7,7 +7,8 @@ class ProfileAdmin(admin.ModelAdmin):
     pass
 
 class PostAdmin(admin.ModelAdmin):
-    list_display = ('profile', 'title', 'timestamp')
+    list_display = ('profile', 'title', 'approved', 'timestamp',)
+    list_editable = ['approved']
 
 admin.site.register(Profile, ProfileAdmin)
 admin.site.register(Post, PostAdmin)

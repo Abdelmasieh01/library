@@ -16,7 +16,7 @@
 		<link rel="stylesheet" href="{% static 'css/noscript.css' %}" />
 	</noscript>
 	{% block stylesheets %}
-
+	
 	{% endblock %}
 </head>
 
@@ -28,13 +28,15 @@
 		<li><a class="active anav" href="{% url 'books:index' %}">الرئيسية</a></li>
 		<li><a class="anav" href="{% url 'books:search' %}">البحث</a></li>
 		<li><a class="anav" href="{% url 'posts:posts' %}">المشاركات</a></li>
-		{% if user.is_authenticated %}
+		{% if user.is_staff %}
 		<li><a class="anav" href="{% url 'books:create-borrower' %}">الاستعارة</a></li>
 		<li><a class="anav" href="{% url 'books:create-book' %}">الكتب</a></li>
 		{% endif %}
 		{% endblock %}
 		{% if user.is_authenticated %}
 		<li style="float:left"><a class="anav" href="{% url 'admin:logout' %}">تسجيل الخروج</a></li>
+		{% else %}
+		<li style="float:left"><a class="anav" href="{% url 'admin:login' %}">تسجيل الدخول</a></li>
 		{% endif %}
 	</ul>
 	{% endblock %}
@@ -73,10 +75,10 @@
 					style="display: flex; align-items: center; justify-content: center;">
 					<form method="POST" action="{% url 'books:search' %}" style="width: 100%;">
 						{% csrf_token %}
-						<div style="display: flex; flex-direction: row; align-items: stretch;">
+						<div style="display: flex; flex-direction: row;">
 							{% block search_input %}
-							<input type="text" placeholder="بحث.." name="search" style="margin-left: 5px; align-self: stretch;">
-							<button type="submit" style="display: inline; align-self: stretch; border-radius: 4px;"><i class="fa fa-search"></i></button>
+							<input type="text" placeholder="بحث.." name="search" style="margin-left: 5px; height: 3em;">
+							<button type="submit" style="display: inline; border-radius: 4px;"><i class="fa fa-search"></i></button>
 							{% endblock %}
 						</div>
 					</form>

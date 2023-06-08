@@ -1,11 +1,15 @@
 from typing import Any, Dict
+from django.urls import reverse
 from django.db.models.query import QuerySet
 from django.shortcuts import render, get_object_or_404
 from django.db.models import Q, CharField, Value
 from django.db.models.functions import Concat
+from django.views.generic.edit import CreateView
 from django.views.generic.list import ListView
 from django.views.generic.detail import DetailView
+from django.contrib.auth.mixins import LoginRequiredMixin
 from .models import Post, Profile
+from .forms import PostForm
 # Create your views here.
 
 class PostListView(ListView):
@@ -43,5 +47,13 @@ class PostDetailView(DetailView):
     
 def posts_by_profile(request, pk=1):
     profile = get_object_or_404(Profile, pk=pk)
-    posts = Post.objects.filter(profile=profile).order_by('-timestamp')
+    posts = Post.objects.filter(profile=profile, approved=True).order_by('-timestamp')
     return render(request, 'posts/post_list.html', {'posts': posts, 'keyword': profile.__str__})
+
+class PostCreateView(LoginRequiredMixin, CreateView):
+    login_url = '/admin/login/'
+    model = Post
+    form_class = PostForm
+    template_name = 'posts/post_form.html'
+    def get_success_url(self):
+        return reverse('books:create-post',)

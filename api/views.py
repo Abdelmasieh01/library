@@ -9,7 +9,6 @@ from rest_framework import status
 from rest_framework import permissions
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
-from rest_framework.viewsets import ViewSet
 from rest_framework.pagination import PageNumberPagination
 
 
@@ -49,14 +48,20 @@ class PostAPIView(generics.ListAPIView):
     def get_queryset(self):
         queryset = Post.objects.filter(approved=True).order_by('-timestamp')
         search = self.request.query_params.get('search')
-    
+        book = self.request.query_params.get('book')
+
+        if book is not None and book != "":
+            queryset = queryset.filter(book=book)
+
         if search is not None and search != "":
             queryset = queryset.annotate(
                     name=Concat(
                     'profile__user__first_name',
                     Value(' '),
                     'profile__user__last_name',
-                    output_field=CharField())).filter(Q(name__icontains=search))
+                    output_field=CharField())).filter(Q(name__icontains=search) | Q(title__icontains=search) | Q(text__icontains=search))
+        
+
         return queryset
 
 class PostCreateAPIView(generics.CreateAPIView):

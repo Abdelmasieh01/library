@@ -18,7 +18,7 @@
                 <div class="post-content">
                     <h3>{{ post.title }}</h3>
                     <ul class="post-meta list-inline">
-                        <li class="list-inline-item">
+                        <li class="list-inline-item"  style="margin-left: 0px;">
                             <img src="{{ post.profile.photo }}" height="16px;" width="16px;" style="border-radius: 100%;"> 
                             <a href="{% url 'posts:profile-posts' post.profile.id %}">{{ post.profile.name }}</a>
                         </li>

@@ -16,7 +16,8 @@ class BorrowerAdmin(admin.ModelAdmin):
         return obj.books.count()
 
 class BorrowingAdmin(admin.ModelAdmin):
-    list_display = ('borrower', 'book', 'borrow_date', 'return_date')
+    list_display = ('borrower', 'book', 'borrow_date', 'returned', 'return_date')
+    list_editable = ['returned', 'return_date']
 
 
 admin.site.register(Book, BookAdmin)
