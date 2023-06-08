@@ -21,6 +21,7 @@ INSTALLED_APPS = [
     #My_apps
     'books',
     'posts',
+    'my_auth',
     'api',
     #django rest framework
     'rest_framework',

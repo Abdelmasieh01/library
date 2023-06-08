@@ -1,13 +1,14 @@
 from typing import Any, Dict
 from django.urls import reverse
 from django.db.models.query import QuerySet
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from django.db.models import Q, CharField, Value
 from django.db.models.functions import Concat
 from django.views.generic.edit import CreateView
 from django.views.generic.list import ListView
 from django.views.generic.detail import DetailView
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.decorators import login_required
 from .models import Post, Profile
 from .forms import PostForm
 # Create your views here.
@@ -50,6 +51,7 @@ def posts_by_profile(request, pk=1):
     posts = Post.objects.filter(profile=profile, approved=True).order_by('-timestamp')
     return render(request, 'posts/post_list.html', {'posts': posts, 'keyword': profile.__str__})
 
+'''
 class PostCreateView(LoginRequiredMixin, CreateView):
     login_url = '/admin/login/'
     model = Post
@@ -57,3 +59,28 @@ class PostCreateView(LoginRequiredMixin, CreateView):
     template_name = 'posts/post_form.html'
     def get_success_url(self):
         return reverse('books:create-post',)
+'''
+
+@login_required(login_url='/admin/login/')
+def create_post(request):
+    if request.method == 'POST':
+        form = PostForm(request.POST)
+        if form.is_valid():
+            profile = request.user.profile
+            title = form.cleaned_data['title']
+            text = form.cleaned_data['text']
+            book = form.cleaned_data['book']
+            image = form.cleaned_data['image']
+            post = Post(title=title, text=text, profile=profile)
+            if book is not None and book != '':
+                post.book = book
+            if image is not None and image != '':
+                post.image = image
+            post.save()
+            return render(request, 'posts/post_form.html', {'form': form, 'success': True})
+        else:
+            return render(request, 'posts/post_form.html', {'form': form, 'error': True, 'success': True})
+    error = False
+    form = PostForm()
+    return render(request, 'posts/post_form.html', {'form': form})
+    

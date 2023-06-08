@@ -34,9 +34,9 @@
 		{% endif %}
 		{% endblock %}
 		{% if user.is_authenticated %}
-		<li style="float:left"><a class="anav" href="{% url 'admin:logout' %}">تسجيل الخروج</a></li>
+		<li style="float:left"><a class="anav" href="{% url 'my_auth:logout' %}">تسجيل الخروج</a></li>
 		{% else %}
-		<li style="float:left"><a class="anav" href="{% url 'admin:login' %}">تسجيل الدخول</a></li>
+		<li style="float:left"><a class="anav" href="{% url 'my_auth:login' %}">تسجيل الدخول</a></li>
 		{% endif %}
 	</ul>
 	{% endblock %}

@@ -1,0 +1,25 @@
+{% extends "books/search.html" %}
+
+{% block active %}
+<li><a class="anav" href="{% url 'books:index' %}">الرئيسية</a></li>
+<li><a class="anav" href="{% url 'books:search' %}">البحث</a></li>
+<li><a class="anav" href="{% url 'posts:posts' %}">المشاركات</a></li>
+{% if user.is_staff %}
+<li><a class="anav" href="{% url 'books:create-borrower' %}">الاستعارة</a></li>
+<li><a class="anav" href="{% url 'books:create-book' %}">الكتب</a></li>
+{% endif %}
+{% endblock %}
+
+{% block search %}
+<div class="container">
+    <div class="row" style="display: flex; justify-content: center;">
+        <form method="post">{% csrf_token %}
+            {{ form.as_p }}
+            {% if error %}
+            <h2 style="color:red;">اسم المستخدم او كلمة المرور غير صحيحة.</h2>
+            {% endif %}
+            <input type="submit" value="تسجيل الدخول">
+        </form>
+    </div>
+</div>
+{% endblock %}
