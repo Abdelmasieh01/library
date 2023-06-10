@@ -1,21 +1,18 @@
 from django.test import TestCase
 from django.urls import reverse
 from django.contrib.auth.models import User
-from datetime import datetime
 from http import HTTPStatus
 
-from books.models import Book, Borrower, Borrowing
+from books.models import Book, Borrowing, Profile
 class BorrowingTestCase(TestCase):
     def setUp(self):
         Book.objects.create(category=200, code=1, name='test1', author='testing', copies=5)
         Book.objects.create(category=200, code=2, name='test2', author='testing', copies=1)
-        Borrower.objects.create(name='tester')
-        User.objects.create_user(username='testuser1', password='1X<ISRUkw+tuK')
+        user = User.objects.create_user(username='testuser1', password='1X<ISRUkw+tuK')
+        Profile.objects.create(user=user, )
 
 
     def test_redirect_if_not_logged_in(self):
-        response = self.client.get(reverse('books:create-borrower'))
-        self.assertRedirects(response, '/admin/login/?next=/borrow/create-borrower/')
         response = self.client.get(reverse('books:create-borrowing'))
         self.assertRedirects(response, '/admin/login/?next=/borrow/create-borrowing/')
         response = self.client.get(reverse('books:return-book'))
@@ -63,14 +60,14 @@ class BorrowingTestCase(TestCase):
         self.assertEqual(response.status_code, HTTPStatus.BAD_REQUEST)
 
         #Testing if book is added in borrower.books
-        borrower = Borrower.objects.get(pk=1)
+        borrower = Profile.objects.get(pk=1)
         book1 = Book.objects.get(pk=1)
         book1 = Book.objects.get(pk=2)
         self.assertTrue(borrower.books.contains(book1))
         self.assertTrue(borrower.books.contains(book2))
     
     def test_return_book(self):
-        borrower = Borrower.objects.get(pk=1)
+        borrower = Profile.objects.get(pk=1)
         book1 = Book.objects.get(pk=1)
         book2 = Book.objects.get(pk=2)
         Borrowing.objects.create(borrower=borrower, book=book1, borrow_date='2023-05-25')
@@ -101,7 +98,7 @@ class BorrowingTestCase(TestCase):
         self.assertTrue(book2.available)
 
         #Testing if book is removed from borrower.books
-        borrower = Borrower.objects.get(pk=1)
+        borrower = Profile.objects.get(pk=1)
         book1 = Book.objects.get(pk=1)
         book1 = Book.objects.get(pk=2)
         self.assertFalse(borrower.books.contains(book1))
@@ -120,14 +117,14 @@ class BorrowingTestCase(TestCase):
         }
         response = self.client.post(reverse('books:edit-book'), data, follow=True)
         self.assertEqual(response.status_code, HTTPStatus.OK)
-        self.assertEqual(response.url, reverse('books:edit-book-details', 1))
+        self.assertRedirects(response, reverse('books:edit-book-details', kwargs={'pk': 1}))
 
         #Test 404 Not Found
-        data['code']
+        data['code'] = 500
         response = self.client.post(reverse('books:edit-book'), data, follow=True)
         self.assertEqual(response.status_code, HTTPStatus.NOT_FOUND)
 
-    def test_edit_book(self):
+    def test_edit_book_details(self):
         #Logging in to get status code 200
         self.client.login(username='testuser1', password='1X<ISRUkw+tuK')
         response = self.client.get(reverse('books:edit-book-details', kwargs={'pk': 1}))

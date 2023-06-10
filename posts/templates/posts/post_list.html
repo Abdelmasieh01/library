@@ -8,7 +8,7 @@
 <li><a class="anav" href="{% url 'books:search' %}">البحث</a></li>
 <li><a class="active anav" href="{% url 'posts:posts' %}">المشاركات</a></li>
 {% if user.is_staff %}
-<li><a class="anav" href="{% url 'books:create-borrower' %}">الاستعارة</a></li>
+<li><a class="anav" href="{% url 'books:create-borrowing' %}">الاستعارة</a></li>
 <li><a class="anav" href="{% url 'books:create-book' %}">الكتب</a></li>
 {% endif %}
 {% endblock %}

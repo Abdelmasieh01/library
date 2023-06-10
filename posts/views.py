@@ -61,7 +61,7 @@ class PostCreateView(LoginRequiredMixin, CreateView):
         return reverse('books:create-post',)
 '''
 
-@login_required(login_url='/admin/login/')
+@login_required(login_url='/web_auth/login/')
 def create_post(request):
     if request.method == 'POST':
         form = PostForm(request.POST)
@@ -79,8 +79,7 @@ def create_post(request):
             post.save()
             return render(request, 'posts/post_form.html', {'form': form, 'success': True})
         else:
-            return render(request, 'posts/post_form.html', {'form': form, 'error': True, 'success': True})
-    error = False
+            return render(request, 'posts/post_form.html', {'form': form, 'error': True})
     form = PostForm()
     return render(request, 'posts/post_form.html', {'form': form})
     

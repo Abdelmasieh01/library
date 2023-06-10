@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from books.models import Book
+from books.models import Book, Borrowing
 from posts.models import Post, Profile
 
 class BookSerializer(serializers.ModelSerializer):
@@ -34,3 +34,8 @@ class ProfileSerializer(serializers.ModelSerializer):
             }
 
         return data
+    
+class BorrowingSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Borrowing
+        fields = '__all__'

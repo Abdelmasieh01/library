@@ -6,12 +6,16 @@ from books.models import Book
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, verbose_name='الحساب')
     photo = models.URLField(blank=True, verbose_name='الصورة')
+    books = models.ManyToManyField(Book, blank=True, verbose_name='الكتب التي استعارها')
 
     def __str__(self):
         return self.user.first_name + ' ' + self.user.last_name
     
     def name(self):
-        return self.user.first_name + ' ' + self.user.last_name 
+        return self.user.first_name + ' ' + self.user.last_name
+
+    def count_books(self):
+        return self.books.count() 
 
 class Post(models.Model):
     profile = models.ForeignKey(Profile, on_delete=models.CASCADE, verbose_name='الكاتب')

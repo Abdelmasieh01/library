@@ -1,5 +1,5 @@
-from .serializers import BookSerializer, PostSerializer, ProfileSerializer
-from books.models import Book
+from .serializers import BookSerializer, PostSerializer, ProfileSerializer, BorrowingSerializer
+from books.models import Book, Borrowing
 from posts.models import Post, Profile
 from django.db.models import Q,  CharField, Value
 from django.db.models.functions import Concat
@@ -67,6 +67,12 @@ class PostAPIView(generics.ListAPIView):
 class PostCreateAPIView(generics.CreateAPIView):
     permission_classes = [permissions.IsAuthenticated,]
     serializer_class = PostSerializer
+
+class BorrowingAPIView(generics.ListAPIView):
+    serializer_class = BorrowingSerializer
+    permission_classes = [permissions.IsAuthenticated]
+    def get_queryset(self):
+        return Borrowing.objects.filter(borrower=self.request.user.profile)
 
 @api_view(['GET'])
 def get_profile(request):

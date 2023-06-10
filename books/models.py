@@ -1,5 +1,6 @@
 from django.db import models
 
+
 class Book(models.Model):
     MIX = 200
     FAMILY = 300
@@ -13,7 +14,7 @@ class Book(models.Model):
     ENCYCLOPEDIAS = 2000
     VOLUMES = 3000
 
-    CHOICES = (
+    CATEGORIES = (
         (MIX, 'منوعات'),
         (FAMILY, 'الأسرة'),
         (YOUTH, 'الشباب'),
@@ -27,7 +28,17 @@ class Book(models.Model):
         (VOLUMES, 'المجلدات'),
     )
 
-    category = models.IntegerField(default=MIX, choices=CHOICES, verbose_name='الرقم العام')
+    AGE_CATEGORIES = (
+        (1, 'حضانة'),
+        (2, 'ابتدائي'),
+        (3, 'اعدادي'),
+        (4, 'ثانوي'),
+        (5, 'الشباب'),
+        (6, 'الأسرة'),
+    )
+
+    category = models.IntegerField(default=MIX, choices=CATEGORIES, verbose_name='الرقم العام')
+    age_category = models.IntegerField(blank=True, null=True, choices=AGE_CATEGORIES, verbose_name='الفئة العمرية')
     code = models.IntegerField(verbose_name='الرقم الخاص')
     name = models.CharField(max_length=150, verbose_name='اسم الكتاب')
     author = models.CharField(max_length=150, verbose_name='المؤلف')
@@ -47,6 +58,7 @@ class Book(models.Model):
 class Author(models.Model):
     pass
 
+'''
 class Borrower(models.Model):
     name = models.CharField(max_length=150, verbose_name='اسم المستعير', unique=True)
     books = models.ManyToManyField(Book, blank=True, verbose_name='الكتب التي استعارها')
@@ -56,16 +68,17 @@ class Borrower(models.Model):
 
     def count_books(self):
         return self.books.count()
-
+'''
+from posts.models import Profile
 class Borrowing(models.Model):
-    borrower = models.ForeignKey(Borrower, on_delete=models.CASCADE, verbose_name='المستعير')
+    borrower = models.ForeignKey(Profile, on_delete=models.CASCADE, verbose_name='المستعير')
     book = models.ForeignKey(Book, on_delete=models.CASCADE, verbose_name='الكتاب')
     borrow_date = models.DateField(verbose_name='تاريخ الاستعارة')
     return_date = models.DateField(blank=True, null=True, verbose_name='تاريخ الإرجاع')
     returned = models.BooleanField(default=False, verbose_name='تم الإرجاع')
 
     def __str__(self):
-        return self.borrower.name + ': ' + self.book.name
+        return self.borrower.name() + ': ' + self.book.name
     
     def save(self, *args, **kwargs):
         if self.returned == False:

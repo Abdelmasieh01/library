@@ -5,12 +5,12 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Q
 from django.views.generic import CreateView
 from http import HTTPStatus
-from .models import Book, Borrower, Borrowing
-from .forms import BorrowerForm, BorrowingForm, ReturnForm, BookForm, BookUpdateForm
+from .models import Book, Borrowing
+from .forms import BorrowingForm, ReturnForm, BookForm, BookUpdateForm
 
 
 def index(request):
-    categories = Book.CHOICES
+    categories = Book.CATEGORIES
     return render(request, 'books/index.html', {'categories': categories})
 
 
@@ -27,7 +27,7 @@ def search(request):
                'books_author': books_author, 'keyword': keyword}
     return render(request, 'books/search.html', context)
 
-
+'''
 class BorrowerCreateView(LoginRequiredMixin, CreateView):
     login_url = '/admin/login/'
     model = Borrower
@@ -36,6 +36,7 @@ class BorrowerCreateView(LoginRequiredMixin, CreateView):
 
     def get_success_url(self):
         return reverse('books:create-borrower',)
+'''
 
 
 @login_required(login_url='/admin/login/')
@@ -49,8 +50,7 @@ def create_borrowing(request):
             try:
                 book = Book.objects.get(category=category, code=code)
             except:
-                error = True
-                return render(request, 'books/borrowing_form.html', {'form': form, 'error': error})
+                return render(request, 'books/borrowing_form.html', {'form': form, 'error': True})
 
             borrower = form.cleaned_data['borrower']
             date = form.cleaned_data['borrow_date']
@@ -58,17 +58,15 @@ def create_borrowing(request):
                 borrowing = Borrowing(borrower=borrower, borrow_date=date, book=book)
                 borrowing.save()
             else:
-                error = True
-                return render(request, 'books/borrowing_form.html', {'form': form, 'error': error}, status=HTTPStatus.NOT_ACCEPTABLE)
+                return render(request, 'books/borrowing_form.html', {'form': form, 'error': True}, status=HTTPStatus.NOT_ACCEPTABLE)
             
             return redirect('books:create-borrowing')
         else:
-            error = True
             form = BorrowingForm()
-            return render(request, 'books/borrowing_form.html', {'form': form, 'error': error}, status=HTTPStatus.BAD_REQUEST)
-    error = False
+            return render(request, 'books/borrowing_form.html', {'form': form, 'error': True}, status=HTTPStatus.BAD_REQUEST)
+    
     form = BorrowingForm()
-    return render(request, 'books/borrowing_form.html', {'form': form, 'error': error})
+    return render(request, 'books/borrowing_form.html', {'form': form})
 
 
 @login_required(login_url='/admin/login/')
@@ -82,12 +80,10 @@ def return_book(request):
             borrowing.save()
             return redirect('books:return-book')
         else: 
-            error = True
-            return render(request, 'books/return_book.html', {'form': form, 'error': error}, status=HTTPStatus.NOT_ACCEPTABLE)
+            return render(request, 'books/return_book.html', {'form': form, 'error': True}, status=HTTPStatus.NOT_ACCEPTABLE)
             
-    error = False
     form = ReturnForm()
-    return render(request, 'books/return_book.html', {'form': form, 'error': error})
+    return render(request, 'books/return_book.html', {'form': form})
 
 
 class BookCreateView(LoginRequiredMixin, CreateView):

@@ -1,5 +1,5 @@
 from django import forms
-from .models import Book, Borrower, Borrowing
+from .models import Book, Borrowing
 
 class DateInput(forms.DateInput):
     input_type = 'date'
@@ -7,17 +7,19 @@ class DateInput(forms.DateInput):
 class BookForm(forms.ModelForm):
     class Meta:
         model = Book
-        fields = ['category', 'code', 'name', 'author', 'copies']
+        fields = ['category', 'code', 'name', 'author', 'copies', 'age_category']
 
 class BookUpdateForm(forms.ModelForm):
     class Meta:
         model = Book
         exclude = ['category', 'code', 'available']
 
+'''
 class BorrowerForm(forms.ModelForm):
     class Meta:
         model = Borrower
         fields = ['name']
+'''
 
 class BorrowingForm(forms.ModelForm):
     category = forms.IntegerField(min_value=200, label='الرقم العام للكتاب')

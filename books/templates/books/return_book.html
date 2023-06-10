@@ -9,7 +9,7 @@
 <div class="container">
     <div class="row gtr-150">
         <div class="col-4 col-12-medium" style="display: flex; justify-content: center;">
-            <a class="button" href="{% url 'books:create-borrower' %}">إضافة مستعير جديد</a>
+            <a class="button" href="{% url 'books:create-borrowing' %}">إضافة مستعير جديد</a>
         </div>
         <div class="col-4 col-12-medium" style="display: flex; justify-content: center;">
             <a class="button" href="{% url 'books:create-borrowing' %}">إضافة طلب استعارة جديد</a>
@@ -38,7 +38,7 @@
 <li><a class="anav" href="{% url 'books:index' %}">الرئيسية</a></li>
 <li><a class="anav" href="{% url 'books:search' %}">البحث</a></li>
 <li><a class="anav" href="{% url 'posts:posts' %}">المشاركات</a></li>
-<li><a class="active anav" href="{% url 'books:create-borrower' %}">الاستعارة</a></li>
+<li><a class="active anav" href="{% url 'books:create-borrowing' %}">الاستعارة</a></li>
 <li><a class="anav" href="{% url 'books:create-book' %}">الكتب</a></li>
 {% endblock %}
 

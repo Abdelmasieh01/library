@@ -9,11 +9,6 @@ admin.site.site_title = 'St. Peter Library'
 class BookAdmin(admin.ModelAdmin):
     list_display = ('category', 'code', 'name', 'author', )
 
-class BorrowerAdmin(admin.ModelAdmin):
-    list_display = ('name', 'book_count')
-
-    def book_count(self, obj):
-        return obj.books.count()
 
 class BorrowingAdmin(admin.ModelAdmin):
     list_display = ('borrower', 'book', 'borrow_date', 'returned', 'return_date')
@@ -21,5 +16,4 @@ class BorrowingAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Book, BookAdmin)
-admin.site.register(Borrower, BorrowerAdmin)
 admin.site.register(Borrowing, BorrowingAdmin)
