@@ -57,7 +57,7 @@ class BorrowingSerializer(serializers.ModelSerializer):
 
 class RecommendationSerializer(serializers.ModelSerializer):
     book_name = serializers.CharField(source='book.name', read_only=True)
-    book_Author = serializers.CharField(source='book.author', read_only=True)
+    book_author = serializers.CharField(source='book.author', read_only=True)
     book_category_name = serializers.CharField(
         source='get_category_display', read_only=True)
     book_category = serializers.CharField(
