@@ -36,6 +36,8 @@ class ProfileSerializer(serializers.ModelSerializer):
         return data
     
 class BorrowingSerializer(serializers.ModelSerializer):
+    book_name = serializers.CharField(source='book.name', read_only=True)
+    borrower_name = serializers.CharField(source='borrower.name', read_only=True)
     class Meta:
         model = Borrowing
-        fields = '__all__'
+        fields = ('id', 'book_name', 'borrow_date', 'return_date', 'returned', 'borrower', 'borrower_name', 'book_id')
