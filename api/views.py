@@ -1,5 +1,5 @@
-from .serializers import BookSerializer, PostSerializer, ProfileSerializer, BorrowingSerializer
-from books.models import Book, Borrowing
+from .serializers import BookSerializer, PostSerializer, ProfileSerializer, BorrowingSerializer, RecommendationSerializer
+from books.models import Book, Borrowing, Recommendation
 from posts.models import Post, Profile
 from django.db.models import Q,  CharField, Value
 from django.db.models.functions import Concat
@@ -73,6 +73,10 @@ class BorrowingAPIView(generics.ListAPIView):
     permission_classes = [permissions.IsAuthenticated]
     def get_queryset(self):
         return Borrowing.objects.filter(borrower=self.request.user.profile)
+
+class RecommendationAPIView(generics.ListAPIView):
+    serializer_class = RecommendationSerializer
+    queryset = Recommendation.objects.all().order_by('-timestamp')
 
 @api_view(['GET'])
 def get_profile(request):

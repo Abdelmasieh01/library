@@ -43,6 +43,7 @@ class Book(models.Model):
     name = models.CharField(max_length=150, verbose_name='اسم الكتاب')
     author = models.CharField(max_length=150, verbose_name='المؤلف')
     copies = models.IntegerField(default=1, verbose_name='عدد النسخ')
+    image = models.URLField(blank=True, null=True, verbose_name='صورة الكتاب')
     available = models.BooleanField(default=True, verbose_name='متاح')
 
     class Meta:
@@ -94,4 +95,12 @@ class Borrowing(models.Model):
             self.book.save()
 
         super(Borrowing, self).save(*args, **kwargs)
-    
+
+class Recommendation(models.Model):
+    book = models.OneToOneField(Book, on_delete=models.CASCADE, verbose_name='الكتاب')
+    text = models.TextField(verbose_name='النص')
+    title = models.TextField(verbose_name='العنوان')
+    timestamp = models.DateField(auto_now_add=True, verbose_name='التاريخ')
+
+    def __str__(self) -> str:
+        return 'ترشيح لكتاب: ' + self.book.name

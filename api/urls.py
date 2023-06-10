@@ -9,5 +9,6 @@ urlpatterns = [
     path('profile/', views.get_profile, name='profile'),
     path('my-profile/', views.my_profile, name='my-profile'),
     path('create-post/', views.PostCreateAPIView.as_view(), name='create-post'),
-    path('borrowing/', views.BorrowingAPIView.as_view(), name='borrowing')
+    path('borrowing/', views.BorrowingAPIView.as_view(), name='borrowing'),
+    path('recommendations/', views.RecommendationAPIView.as_view(), name='recommendations')
 ]

@@ -1,21 +1,29 @@
 from rest_framework import serializers
-from books.models import Book, Borrowing
+from books.models import Book, Borrowing, Recommendation
 from posts.models import Post, Profile
 
+
 class BookSerializer(serializers.ModelSerializer):
-    category_name = serializers.CharField(source='get_category_display', read_only=True)
+    category_name = serializers.CharField(
+        source='get_category_display', read_only=True)
+
     class Meta:
         model = Book
-        fields = ('id', 'category', 'code', 'name', 'author', 'copies', 'available', 'category_name')
+        fields = ('id', 'category', 'code', 'name', 'author',
+                  'copies', 'available', 'category_name')
+
 
 class PostSerializer(serializers.ModelSerializer):
     profile_name = serializers.CharField(source='profile.name', read_only=True)
+
     class Meta:
         model = Post
-        fields = ('id', 'profile', 'title', 'text', 'image', 'profile_name', 'timestamp', 'book',)
+        fields = ('id', 'profile', 'title', 'text', 'image',
+                  'profile_name', 'timestamp', 'book',)
+
 
 class ProfileSerializer(serializers.ModelSerializer):
-        
+
     class Meta:
         model = Profile
         fields = '__all__'
@@ -27,17 +35,38 @@ class ProfileSerializer(serializers.ModelSerializer):
         name = instance.name()
 
         data = {
-                'id': id,
-                'user': user,
-                'photo': photo,
-                'name': name
-            }
+            'id': id,
+            'user': user,
+            'photo': photo,
+            'name': name
+        }
 
         return data
-    
+
+
 class BorrowingSerializer(serializers.ModelSerializer):
     book_name = serializers.CharField(source='book.name', read_only=True)
-    borrower_name = serializers.CharField(source='borrower.name', read_only=True)
+    borrower_name = serializers.CharField(
+        source='borrower.name', read_only=True)
+
     class Meta:
         model = Borrowing
-        fields = ('id', 'book_name', 'borrow_date', 'return_date', 'returned', 'borrower', 'borrower_name', 'book_id')
+        fields = ('id', 'book_name', 'borrow_date', 'return_date',
+                  'returned', 'borrower', 'borrower_name', 'book_id')
+
+
+class RecommendationSerializer(serializers.ModelSerializer):
+    book_name = serializers.CharField(source='book.name', read_only=True)
+    book_Author = serializers.CharField(source='book.author', read_only=True)
+    book_category_name = serializers.CharField(
+        source='get_category_display', read_only=True)
+    book_category = serializers.CharField(
+        source='book.category', read_only=True)
+    book_code = serializers.CharField(source='book.code', read_only=True)
+    book_age_category = serializers.CharField(
+        source='book.age_category', read_only=True)
+
+    class Meta:
+        model = Recommendation
+        fields = ('id', 'book_name', 'title', 'book_author', 'book_category_name',
+                  'book_category', 'book_code', 'book_age_category', 'text', 'book')
