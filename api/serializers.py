@@ -59,14 +59,15 @@ class RecommendationSerializer(serializers.ModelSerializer):
     book_name = serializers.CharField(source='book.name', read_only=True)
     book_author = serializers.CharField(source='book.author', read_only=True)
     book_category_name = serializers.CharField(
-        source='get_category_display', read_only=True)
+        source='book.get_category_display', read_only=True)
     book_category = serializers.CharField(
         source='book.category', read_only=True)
     book_code = serializers.CharField(source='book.code', read_only=True)
     book_age_category = serializers.CharField(
         source='book.age_category', read_only=True)
+    book_image = serializers.URLField(source='book.image', read_only=True)
 
     class Meta:
         model = Recommendation
         fields = ('id', 'book_name', 'title', 'book_author', 'book_category_name',
-                  'book_category', 'book_code', 'book_age_category', 'text', 'book')
+                  'book_category', 'book_code', 'book_age_category', 'book_image', 'text', 'book')
