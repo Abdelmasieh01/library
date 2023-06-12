@@ -7,11 +7,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = config('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = [
     'localhost',
     'st-peter-lib.onrender.com',
+    '34.239.114.104',
 ]
 
 
@@ -165,10 +166,14 @@ FIXTURES_DIRS = [
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 #CSRF Setting
-CSRF_TRUSTED_ORIGINS = ['https://st-peter-lib.onrender.com']
+CSRF_TRUSTED_ORIGINS = [
+    'https://st-peter-lib.onrender.com',
+    'http://34.239.114.104',
+]
 
 #CORS Settings
 CORS_ALLOWED_ORIGINS = [
     'https://st-peter-library.flutterflow.app',
     'http://localhost:8080',
+    'http://34.239.114.104',
 ]
