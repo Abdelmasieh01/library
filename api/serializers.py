@@ -67,7 +67,13 @@ class RecommendationSerializer(serializers.ModelSerializer):
         source='book.age_category', read_only=True)
     book_image = serializers.URLField(source='book.image', read_only=True)
 
+    user_name = serializers.SerializerMethodField()
+    user_id = serializers.IntegerField(source='profile.id', read_only=True)
+
+    def get_user_name(self, obj):
+        return f'{obj.profile.name()}'
+
     class Meta:
         model = Recommendation
         fields = ('id', 'book_name', 'title', 'book_author', 'book_category_name',
-                  'book_category', 'book_code', 'book_age_category', 'book_image', 'text', 'book')
+                  'book_category', 'book_code', 'book_age_category', 'book_image', 'text', 'book', 'user_name', 'user_id')

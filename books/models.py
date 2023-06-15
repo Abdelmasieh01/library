@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import User
 
 
 class Book(models.Model):
@@ -98,8 +99,9 @@ class Borrowing(models.Model):
 
 class Recommendation(models.Model):
     book = models.OneToOneField(Book, on_delete=models.CASCADE, verbose_name='الكتاب')
-    text = models.TextField(verbose_name='النص')
+    profile = models.ForeignKey(Profile, on_delete=models.CASCADE, verbose_name='المستخدم')
     title = models.TextField(verbose_name='العنوان')
+    text = models.TextField(verbose_name='النص')
     timestamp = models.DateField(auto_now_add=True, verbose_name='التاريخ')
 
     def __str__(self) -> str:

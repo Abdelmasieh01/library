@@ -7,7 +7,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = config('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = [
     'localhost',
@@ -178,5 +178,5 @@ CORS_ALLOWED_ORIGINS = [
     'https://st-peter-library.flutterflow.app',
     'http://localhost:8080',
     'http://52.45.145.20',
-    'http://stpeterlibrary.crabdance.com/',
+    'http://stpeterlibrary.crabdance.com',
 ]
