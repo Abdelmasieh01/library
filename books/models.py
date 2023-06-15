@@ -45,6 +45,7 @@ class Book(models.Model):
     author = models.CharField(max_length=150, verbose_name='المؤلف')
     copies = models.IntegerField(default=1, verbose_name='عدد النسخ')
     image = models.URLField(blank=True, null=True, verbose_name='صورة الكتاب')
+    link = models.URLField(blank=True, null=True, verbose_name='رابط الكتاب')
     available = models.BooleanField(default=True, verbose_name='متاح')
 
     class Meta:
