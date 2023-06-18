@@ -6,11 +6,13 @@ from posts.models import Post, Profile
 class BookSerializer(serializers.ModelSerializer):
     category_name = serializers.CharField(
         source='get_category_display', read_only=True)
+    age_category_name = serializers.CharField(
+        source='get_age_category_display', read_only=True)
 
     class Meta:
         model = Book
         fields = ('id', 'category', 'code', 'name', 'author',
-                  'copies', 'available', 'category_name')
+                  'copies', 'available', 'category_name', 'age_category_name', 'link')
 
 
 class PostSerializer(serializers.ModelSerializer):
@@ -76,4 +78,5 @@ class RecommendationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Recommendation
         fields = ('id', 'book_name', 'title', 'book_author', 'book_category_name',
-                  'book_category', 'book_code', 'book_age_category', 'book_image', 'text', 'book', 'user_name', 'user_id')
+                  'book_category', 'book_code', 'book_age_category', 'book_image', 
+                  'text', 'book', 'user_name', 'user_id', 'timestamp')

@@ -103,6 +103,7 @@ class Recommendation(models.Model):
     profile = models.ForeignKey(Profile, on_delete=models.CASCADE, verbose_name='المستخدم')
     title = models.TextField(verbose_name='العنوان')
     text = models.TextField(verbose_name='النص')
+    approved = models.BooleanField(default=False, verbose_name='قبول الاقتراح')
     timestamp = models.DateField(auto_now_add=True, verbose_name='التاريخ')
 
     def __str__(self) -> str:

@@ -76,7 +76,7 @@ class BorrowingAPIView(generics.ListAPIView):
 
 class RecommendationAPIView(generics.ListAPIView):
     serializer_class = RecommendationSerializer
-    queryset = Recommendation.objects.all().order_by('-timestamp')
+    queryset = Recommendation.objects.filter(approved=True).order_by('-timestamp')
 
 @api_view(['GET'])
 def get_profile(request):
