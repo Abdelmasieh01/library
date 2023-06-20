@@ -4,14 +4,11 @@ from django.contrib.auth.models import User
 from http import HTTPStatus
 
 from books.models import Book, Borrowing, Profile
-class BorrowingTestCase(TestCase):
+class LoginTestCase(TestCase):
     def setUp(self):
-        Book.objects.create(category=200, code=1, name='test1', author='testing', copies=5)
-        Book.objects.create(category=200, code=2, name='test2', author='testing', copies=1)
-        user = User.objects.create_user(username='testuser1', password='1X<ISRUkw+tuK')
-        Profile.objects.create(user=user, )
-
-
+        User.objects.create_user(username='testuser1', password='1X<ISRUkw+tuK')
+        Book.objects.create(category=200, code=1, name='test', author='test')
+    
     def test_redirect_if_not_logged_in(self):
         response = self.client.get(reverse('books:create-borrowing'))
         self.assertRedirects(response, '/admin/login/?next=/borrow/create-borrowing/')
@@ -24,11 +21,32 @@ class BorrowingTestCase(TestCase):
         response = self.client.get('/books/edit-book/1/')
         self.assertRedirects(response, '/admin/login/?next=/books/edit-book/1/')
     
-    def test_create_borrowing(self):
-        #Logging in to get status code 200
+    def test_status_200_if_logged_in(self):
         self.client.login(username='testuser1', password='1X<ISRUkw+tuK')
+        
         response = self.client.get(reverse('books:create-borrowing'))
         self.assertEqual(response.status_code, HTTPStatus.OK)
+        response = self.client.get(reverse('books:return-book'))
+        self.assertEqual(response.status_code, HTTPStatus.OK)
+        response = self.client.get(reverse('books:create-book'))
+        self.assertEqual(response.status_code, HTTPStatus.OK)
+        response = self.client.get(reverse('books:edit-book'))
+        self.assertEqual(response.status_code, HTTPStatus.OK)
+        response = self.client.get('/books/edit-book/1/')
+        self.assertEqual(response.status_code, HTTPStatus.OK)
+        
+        
+
+class BorrowingTestCase(TestCase):
+    def setUp(self):
+        Book.objects.create(category=200, code=1, name='test1', author='testing', copies=5)
+        Book.objects.create(category=200, code=2, name='test2', author='testing', copies=1)
+        user = User.objects.create_user(username='testuser1', password='1X<ISRUkw+tuK')
+        Profile.objects.create(user=user, )
+    
+    def test_create_borrowing(self):
+        #Logging in
+        self.client.login(username='testuser1', password='1X<ISRUkw+tuK')
 
         #Data for the form
         data = {
@@ -72,11 +90,15 @@ class BorrowingTestCase(TestCase):
         book2 = Book.objects.get(pk=2)
         Borrowing.objects.create(borrower=borrower, book=book1, borrow_date='2023-05-25')
         Borrowing.objects.create(borrower=borrower, book=book2, borrow_date='2023-05-25')
+        book1.copies -= 1 
+        book2.copies -= 1
+        book2.available = False
+        book1.save()
+        book2.save()
 
-        #Logging in to get status code 200
+        #Logging in
         self.client.login(username='testuser1', password='1X<ISRUkw+tuK')
-        response = self.client.get(reverse('books:return-book'))
-        self.assertEqual(response.status_code, HTTPStatus.OK)
+
         #Data for the form
         data = {
             'borrowing': 1,
@@ -103,12 +125,17 @@ class BorrowingTestCase(TestCase):
         book1 = Book.objects.get(pk=2)
         self.assertFalse(borrower.books.contains(book1))
         self.assertFalse(borrower.books.contains(book2))
-    
+
+class BookEditTestCase(TestCase):
+    def setUp(self):
+        Book.objects.create(category=200, code=1, name='test1', author='testing', copies=5)
+        Book.objects.create(category=200, code=2, name='test2', author='testing', copies=1)
+        user = User.objects.create_user(username='testuser1', password='1X<ISRUkw+tuK')
+        Profile.objects.create(user=user, )
+
     def test_edit_book(self):
-        #Logging in to get status code 200
+        #Logging in
         self.client.login(username='testuser1', password='1X<ISRUkw+tuK')
-        response = self.client.get(reverse('books:edit-book'))
-        self.assertEqual(response.status_code, HTTPStatus.OK)
 
         #Data for the form
         data = {
@@ -125,10 +152,8 @@ class BorrowingTestCase(TestCase):
         self.assertEqual(response.status_code, HTTPStatus.NOT_FOUND)
 
     def test_edit_book_details(self):
-        #Logging in to get status code 200
+        #Logging in
         self.client.login(username='testuser1', password='1X<ISRUkw+tuK')
-        response = self.client.get(reverse('books:edit-book-details', kwargs={'pk': 1}))
-        self.assertEqual(response.status_code, HTTPStatus.OK)
 
         #Data for the form
         data = {
@@ -144,9 +169,12 @@ class BorrowingTestCase(TestCase):
         self.assertEqual(book1.author, 'test_testing')
         self.assertEqual(book1.copies, 10)
     
-    def test_search(self):
+class SearchTestCase(TestCase):
+    def setUp(self):
         Book.objects.create(category=200, code=3, name='اختبار', author='testing', copies=5)
         Book.objects.create(category=200, code=4, name='test', author='أختبار', copies=5)
+
+    def test_search(self):
         #Data for the form
         data = {
             'search': 'اخت',

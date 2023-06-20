@@ -43,7 +43,7 @@ class PostDetailView(DetailView):
 
     def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
         context = super().get_context_data(**kwargs)
-        context['posts'] = Post.objects.all().exclude(pk=self.get_object().pk).order_by('-timestamp')[:3]
+        context['posts'] = Post.objects.filter(approved=True).exclude(pk=self.get_object().pk).order_by('-timestamp')[:3]
         return context
     
 def posts_by_profile(request, pk=1):
@@ -72,14 +72,14 @@ def create_post(request):
             book = form.cleaned_data['book']
             image = form.cleaned_data['image']
             post = Post(title=title, text=text, profile=profile)
-            if book is not None and book != '':
+            if (book is not None) and (book != ''):
                 post.book = book
-            if image is not None and image != '':
+            if (image is not None) and (image != ''):
                 post.image = image
             post.save()
-            return render(request, 'posts/post_form.html', {'form': form, 'success': True})
+            return render(request, 'posts/post_form.html', {'form': form, 'success': True, 'error': False})
         else:
-            return render(request, 'posts/post_form.html', {'form': form, 'error': True})
+            return render(request, 'posts/post_form.html', {'form': form, 'error': True}, status=406) #Not acceptable
     form = PostForm()
     return render(request, 'posts/post_form.html', {'form': form})
     

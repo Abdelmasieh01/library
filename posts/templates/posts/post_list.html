@@ -1,6 +1,6 @@
 {% extends 'books/search.html' %}
 {% load post_extras %}
-
+{% load static %}
 
 
 {% block active %}
@@ -50,6 +50,7 @@
                 {% if post.image %}
                 <a class="link" href="{% url 'posts:details' post.id %}"><img class="card-img-top" height=" 150px;" src="{{ post.image }}" alt="Card image cap"></a>
                 {% else %}
+                <a class="link" href="{% url 'posts:details' post.id %}"><img class="card-img-top" height=" 150px;" src="{% static 'images/LOGO 1.png' %}" alt="Card image cap"></a>
                 {% endif %}
                 <div class="card-body">
                     <a class="link" href="{% url 'posts:details' post.id %}"><h5 class="card-title">{{ post.title }}</h5>

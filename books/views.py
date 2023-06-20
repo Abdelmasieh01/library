@@ -56,6 +56,10 @@ def create_borrowing(request):
             date = form.cleaned_data['borrow_date']
             if book.copies > 0:
                 borrowing = Borrowing(borrower=borrower, borrow_date=date, book=book)
+                book.copies -=1
+                book.available = borrowing.book.copies > 0
+                borrower.books.add(borrowing.book)
+                book.save() 
                 borrowing.save()
             else:
                 return render(request, 'books/borrowing_form.html', {'form': form, 'error': True}, status=HTTPStatus.NOT_ACCEPTABLE)
@@ -77,6 +81,10 @@ def return_book(request):
             borrowing = form.cleaned_data['borrowing']
             borrowing.return_date = form.cleaned_data['return_date']
             borrowing.returned = True
+            borrowing.book.copies += 1
+            borrowing.book.available = True
+            borrowing.borrower.books.remove(borrowing.book)
+            borrowing.book.save()
             borrowing.save()
             return redirect('books:return-book')
         else: 
