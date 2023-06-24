@@ -12,11 +12,11 @@ class ProfileTestCase(TestCase):
 
     def test_profile_str_name(self):
         self.assertEqual(self.profile.__str__(), 'test1 test2')
-        self.assertEqual(self.profile.name(), 'test1 test2')
+        self.assertEqual(self.profile.name, 'test1 test2')
     
     def test_count_books(self):
         self.profile.books.add(self.book)
-        self.assertEqual(self.profile.count_books(), 1)
+        self.assertEqual(self.profile.count_books, 1)
 
 class PostTestCase(TestCase):
     def setUp(self):

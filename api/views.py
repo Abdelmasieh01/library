@@ -1,5 +1,5 @@
-from .serializers import BookSerializer, PostSerializer, ProfileSerializer, BorrowingSerializer, RecommendationSerializer
-from books.models import Book, Borrowing, Recommendation
+from .serializers import BookSerializer, PostSerializer, ProfileSerializer, BorrowingSerializer, RecommendationSerializer, AnnouncementSerializer, AppLinkSerializer
+from books.models import Book, Borrowing, Recommendation, Announcement
 from posts.models import Post, Profile
 from django.db.models import Q,  CharField, Value
 from django.db.models.functions import Concat
@@ -76,7 +76,11 @@ class BorrowingAPIView(generics.ListAPIView):
 
 class RecommendationAPIView(generics.ListAPIView):
     serializer_class = RecommendationSerializer
-    queryset = Recommendation.objects.filter(approved=True).order_by('-timestamp')
+    queryset = Recommendation.objects.all().order_by('-timestamp')
+
+class AnnouncementAPIView(generics.ListAPIView):
+    serializer_class = AnnouncementSerializer
+    queryset = Announcement.objects.all().order_by('-timestamp')
 
 @api_view(['GET'])
 def get_profile(request):
@@ -111,3 +115,8 @@ def my_profile(request):
             return Response(status=status.HTTP_404_NOT_FOUND)
     else:
         return Response(status=status.HTTP_404_NOT_FOUND)
+
+@api_view(['GET'])
+def app_link(request):
+    serializer = AppLinkSerializer()
+    return Response(data=serializer.data, status=status.HTTP_200_OK)

@@ -81,16 +81,28 @@ class Borrowing(models.Model):
     returned = models.BooleanField(default=False, verbose_name='تم الإرجاع')
 
     def __str__(self):
-        return self.borrower.name() + ': ' + self.book.name
+        return self.borrower.name + ': ' + self.book.name
     
-
-class Recommendation(models.Model):
-    book = models.OneToOneField(Book, on_delete=models.CASCADE, verbose_name='الكتاب')
-    profile = models.ForeignKey(Profile, on_delete=models.CASCADE, verbose_name='المستخدم')
+class ContentFields(models.Model):
+    '''
+    Common Content Fields like timestamp, title, and text
+    '''
     title = models.TextField(verbose_name='العنوان')
     text = models.TextField(verbose_name='النص')
-    approved = models.BooleanField(default=False, verbose_name='قبول الاقتراح')
     timestamp = models.DateField(auto_now_add=True, verbose_name='التاريخ')
+
+    class Meta:
+        abstract = True
+
+class Recommendation(ContentFields):
+    book = models.OneToOneField(Book, on_delete=models.CASCADE, verbose_name='الكتاب')
 
     def __str__(self) -> str:
         return 'ترشيح لكتاب: ' + self.book.name
+
+class Announcement(ContentFields):
+    image = models.URLField(blank=True, verbose_name='الصورة')
+    show = models.BooleanField(default=True, verbose_name='إظهار الإعلان')
+
+    def __str__(self):
+        return self.title

@@ -9,11 +9,13 @@ class Profile(models.Model):
     books = models.ManyToManyField(Book, blank=True, verbose_name='الكتب التي استعارها')
 
     def __str__(self):
-        return self.user.first_name + ' ' + self.user.last_name
+        return self.name
     
+    @property
     def name(self):
         return self.user.first_name + ' ' + self.user.last_name
 
+    @property
     def count_books(self):
         return self.books.count() 
 
@@ -27,4 +29,4 @@ class Post(models.Model):
     timestamp = models.DateTimeField(auto_now_add=True, verbose_name='التاريخ والوقت')
 
     def __str__(self):
-        return self.title + ' للكاتب: ' + self.profile.name()
+        return self.title + ' للكاتب: ' + self.profile.name

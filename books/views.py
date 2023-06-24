@@ -1,11 +1,12 @@
 from django.shortcuts import render, redirect
 from django.urls import reverse
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Q
 from django.views.generic import CreateView
 from http import HTTPStatus
 from .models import Book, Borrowing
+from posts.models import Profile
 from .forms import BorrowingForm, ReturnForm, BookForm, BookUpdateForm
 
 
@@ -38,8 +39,21 @@ class BorrowerCreateView(LoginRequiredMixin, CreateView):
         return reverse('books:create-borrower',)
 '''
 
+def try_borrow(book: Book, borrower: Profile, date) -> bool:
+    if book.copies > 0:
+        borrowing = Borrowing(borrower=borrower, borrow_date=date, book=book)
+        book.copies -=1
+        book.available = borrowing.book.copies > 0
+        borrower.books.add(borrowing.book)
+        book.save() 
+        borrowing.save()
+        return True
+    else:
+        return False
+
 
 @login_required(login_url='/admin/login/')
+#@permission_required()
 def create_borrowing(request):
     if request.method == 'POST':
         form = BorrowingForm(request.POST)
@@ -54,15 +68,10 @@ def create_borrowing(request):
 
             borrower = form.cleaned_data['borrower']
             date = form.cleaned_data['borrow_date']
-            if book.copies > 0:
-                borrowing = Borrowing(borrower=borrower, borrow_date=date, book=book)
-                book.copies -=1
-                book.available = borrowing.book.copies > 0
-                borrower.books.add(borrowing.book)
-                book.save() 
-                borrowing.save()
-            else:
-                return render(request, 'books/borrowing_form.html', {'form': form, 'error': True}, status=HTTPStatus.NOT_ACCEPTABLE)
+            
+            success = try_borrow(book, borrower, date)
+            if not success:
+                return render(request, 'books/borrowing_form.html', {'form': form, 'error': True}, status=HTTPStatus.NOT_ACCEPTABLE)                
             
             return redirect('books:create-borrowing')
         else:
