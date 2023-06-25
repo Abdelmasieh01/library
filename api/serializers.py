@@ -34,7 +34,7 @@ class ProfileSerializer(serializers.ModelSerializer):
         id = instance.id
         user = instance.user.id
         photo = instance.photo
-        name = instance.name()
+        name = instance.name
 
         data = {
             'id': id,
