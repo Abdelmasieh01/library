@@ -83,6 +83,6 @@ class AnnouncementSerializer(serializers.ModelSerializer):
 #Serializing the link to the app
 class AppLinkSerializer(serializers.Serializer):
     data = {
-            'version': 100,
+            'version': '1.0.0',
             'link': '',
         }
