@@ -145,9 +145,9 @@ STORAGES = {
     },
 }
 
-if DEBUG == True:
-    MEDIA_ROOT = BASE_DIR / 'media/'
-    MEDIA_URL = '/media/'
+#Media settings
+MEDIA_ROOT = BASE_DIR / 'media/'
+MEDIA_URL = '/media/'
 
 #Rest API pagination settings
 
