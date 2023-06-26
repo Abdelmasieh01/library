@@ -8,6 +8,5 @@ urlpatterns = [
     path('search/', views.search_posts, name='search'),
     path('<int:pk>/', views.PostDetailView.as_view(), name='details'),
     path('profile/<int:pk>/', views.posts_by_profile, name='profile-posts'),
-    #path('create/', views.PostCreateView.as_view(), name='create-post')
     path('create/', views.create_post, name='create-post'),
 ]

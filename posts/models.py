@@ -1,11 +1,12 @@
 from django.db import models
 from django.contrib.auth.models import User
+
 from books.models import Book
 
 # Create your models here.
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, verbose_name='الحساب')
-    photo = models.URLField(blank=True, verbose_name='الصورة')
+    photo = models.ImageField(blank=True, null=True, upload_to='profile_photos', verbose_name='الصورة')
     books = models.ManyToManyField(Book, blank=True, verbose_name='الكتب التي استعارها')
 
     def __str__(self):

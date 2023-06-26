@@ -2183,6 +2183,7 @@ label {
 	margin: 0 0 1em 0;
 }
 
+input[type="url"],
 input[type="text"],
 input[type="password"],
 input[type="email"],
@@ -2243,11 +2244,12 @@ select::-ms-expand {
 	display: none;
 }
 
+input[type="url"],
 input[type="text"],
 input[type="password"],
 input[type="email"],
 select {
-	height: 2.75em;
+	height: 3em;
 }
 
 textarea {
@@ -3880,3 +3882,4 @@ li a.anav:hover {
 a.link {
 	text-decoration: none;
 }
+

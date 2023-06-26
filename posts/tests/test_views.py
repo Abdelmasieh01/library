@@ -73,14 +73,13 @@ class PostCreateTestCase(TestCase):
         self.assertIsNone(post.book)
         self.assertEqual(post.image, '')
     
-    def test_create_post_book_and_image_provided(self):
+    def test_create_post_book_provided(self):
         self.client.login(username='test_user1', password='1X<ISRUkw+tuK')
         
         data = {
             'title': 'This is a test post title.',
             'text': 'This is a test post text.',
             'book': 1,
-            'image': 'https://tpc.googlesyndication.com/simgad/2894417314404102158',
         }    
         response = self.client.post(reverse('posts:create-post'), data, follow=True)
 
@@ -88,7 +87,6 @@ class PostCreateTestCase(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertTrue(response.context.get('success', False))
         self.assertEqual(post.book, Book.objects.get(pk=1))
-        self.assertEqual(post.image, 'https://tpc.googlesyndication.com/simgad/2894417314404102158')
     
     def test_create_post_error(self):
         self.client.login(username='test_user1', password='1X<ISRUkw+tuK')

@@ -7,7 +7,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = config('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = config('DEBUG') == 'True'
 
 ALLOWED_HOSTS = [
     'localhost',
@@ -129,15 +129,14 @@ STATICFILES_DIRS = [
 ]
 #Static ROOT
 STATIC_ROOT = BASE_DIR / 'staticfiles'
+
 #Whitenoise storage
-
-
 STORAGES = {
     # ...
     'default': {
         'BACKEND': 'django.core.files.storage.FileSystemStorage',
         'OPTIONS': {
-            'location': '/media/',
+            'location': BASE_DIR / 'media/',
         },
         'PREFIX': '/media/',
     },
@@ -145,6 +144,10 @@ STORAGES = {
         'BACKEND': 'whitenoise.storage.CompressedStaticFilesStorage',
     },
 }
+
+if DEBUG == True:
+    MEDIA_ROOT = BASE_DIR / 'media/'
+    MEDIA_URL = '/media/'
 
 #Rest API pagination settings
 
