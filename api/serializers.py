@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from books.models import Book, Borrowing, Recommendation, Announcement
 from posts.models import Post, Profile
+from django.conf import settings
 
 
 class BookSerializer(serializers.ModelSerializer):
@@ -25,7 +26,10 @@ class PostSerializer(serializers.ModelSerializer):
 
 
 class ProfileSerializer(serializers.ModelSerializer):
-    user = serializers.IntegerField(source='user.id', read_only=True)
+    photo = serializers.SerializerMethodField()
+
+    def get_photo(self, instance):
+        return f'stpeterlibrary.crabdance.com/media/{instance.photo}' 
 
     class Meta:
         model = Profile
