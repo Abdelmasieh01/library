@@ -25,25 +25,11 @@ class PostSerializer(serializers.ModelSerializer):
 
 
 class ProfileSerializer(serializers.ModelSerializer):
+    user = serializers.IntegerField(source='user.id', read_only=True)
 
     class Meta:
         model = Profile
-        fields = '__all__'
-
-    def to_representation(self, instance):
-        id = instance.id
-        user = instance.user.id
-        photo = instance.photo
-        name = instance.name
-
-        data = {
-            'id': id,
-            'user': user,
-            'photo': photo,
-            'name': name
-        }
-
-        return data
+        fields = ('id', 'name', 'photo', 'user')
 
 
 class BorrowingSerializer(serializers.ModelSerializer):
