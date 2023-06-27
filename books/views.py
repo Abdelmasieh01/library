@@ -1,7 +1,9 @@
 from django.shortcuts import render, redirect
 from django.urls import reverse
-from django.contrib.auth.decorators import login_required, permission_required
+from django.contrib.auth.decorators import login_required
+from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.utils.decorators import method_decorator
 from django.db.models import Q
 from django.views.generic import CreateView
 from http import HTTPStatus
@@ -53,7 +55,7 @@ def try_borrow(book: Book, borrower: Profile, date) -> bool:
 
 
 @login_required(login_url='/admin/login/')
-#@permission_required()
+@staff_member_required
 def create_borrowing(request):
     if request.method == 'POST':
         form = BorrowingForm(request.POST)
@@ -83,6 +85,7 @@ def create_borrowing(request):
 
 
 @login_required(login_url='/admin/login/')
+@staff_member_required
 def return_book(request):
     if request.method == 'POST':
         form = ReturnForm(request.POST)
@@ -102,7 +105,7 @@ def return_book(request):
     form = ReturnForm()
     return render(request, 'books/return_book.html', {'form': form})
 
-
+@method_decorator(staff_member_required, name='dispatch')
 class BookCreateView(LoginRequiredMixin, CreateView):
     login_url = '/admin/login/'
     model = Book
@@ -114,6 +117,7 @@ class BookCreateView(LoginRequiredMixin, CreateView):
 
 
 @login_required(login_url='/admin/login/')
+@staff_member_required
 def edit_book(request):
     if request.method == 'POST':
         try:
@@ -132,6 +136,7 @@ def edit_book(request):
 
 
 @login_required(login_url='/admin/login/')
+@staff_member_required
 def edit_book_details(request, pk=2653):
     if request.method == 'POST':
         form = BookUpdateForm(request.POST)
