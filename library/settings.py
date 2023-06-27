@@ -146,7 +146,10 @@ STORAGES = {
 }
 
 #Media settings
-MEDIA_ROOT = BASE_DIR / 'media/'
+if DEBUG:
+    MEDIA_ROOT = BASE_DIR / 'media/'
+else:
+    MEDIA_ROOT = '/var/opt/library/media/'
 MEDIA_URL = '/media/'
 
 #Rest API pagination settings
