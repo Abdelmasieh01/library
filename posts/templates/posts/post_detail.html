@@ -22,7 +22,7 @@
                     <h3>{{ post.title }}</h3>
                     <ul class="post-meta list-inline">
                         <li class="list-inline-item"  style="margin-left: 0px;">
-                            <img src="{{ post.profile.photo }}" height="16px;" width="16px;" style="border-radius: 100%;"> 
+                            <img src="/media/{{post.profile.photo}}" height="16px;" width="16px;" style="border-radius: 100%;"> 
                             <a href="{% url 'posts:profile-posts' post.profile.id %}">{{ post.profile.name }}</a>
                         </li>
                         <li class="list-inline-item">
@@ -32,14 +32,6 @@
                     <br>
                     <p class="lead">{{ post.text | linebreaksbr }}</p>
                     </ul>
-                    <hr class="mb40">
-                    <h4 class="mb40 text-uppercase font500">عن الكاتب: </h4>
-                    <div class="media mb40">
-                        <img width="80px;" height="80px;" src="{{ post.profile.photo }}"></i>
-                        <div class="media-body">
-                            <h5 class="mt-0 font700">{{ post.profile.name }}</h5>
-                        </div>
-                    </div>
                 </div>
             </article>
             <!-- post article-->
