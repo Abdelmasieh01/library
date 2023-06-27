@@ -146,17 +146,8 @@ STORAGES = {
 }
 
 #Media settings
-if DEBUG:
-    MEDIA_ROOT = BASE_DIR / 'media/'
-else:
-    MEDIA_ROOT = '/library/media/'
-    STORAGES['default'] = {
-        'BACKEND': 'django.core.files.storage.FileSystemStorage',
-        'OPTIONS': {
-            'location': '/library/media/',
-        },
-        'PREFIX': '/media/',
-    }
+
+MEDIA_ROOT = BASE_DIR / 'media/'
 MEDIA_URL = '/media/'
 
 #Rest API pagination settings
