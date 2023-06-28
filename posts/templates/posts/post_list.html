@@ -50,7 +50,7 @@
                 {% if post.image %}
                 <a class="link" href="{% url 'posts:details' post.id %}"><img class="card-img-top" height="200px;" src="{{ post.image }}" alt="Card image cap"></a>
                 {% else %}
-                <a class="link" href="{% url 'posts:details' post.id %}"><img class="card-img-top" height="200px;" src="{% static 'images/LOGO 1.png' %}" alt="Card image cap"></a>
+                <a class="link" href="{% url 'posts:details' post.id %}"><img class="card-img-top" height="200px;" src="{% static 'images/logo1.png' %}" alt="Card image cap"></a>
                 {% endif %}
                 <div class="card-body">
                     <a class="link" href="{% url 'posts:details' post.id %}"><h5 class="card-title">{{ post.title }}</h5>
