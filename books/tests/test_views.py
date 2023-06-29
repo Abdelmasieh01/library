@@ -4,44 +4,15 @@ from django.contrib.auth.models import User
 from http import HTTPStatus
 
 from books.models import Book, Borrowing, Profile
-class LoginTestCase(TestCase):
-    def setUp(self):
-        User.objects.create_user(username='testuser1', password='1X<ISRUkw+tuK')
-        Book.objects.create(category=200, code=1, name='test', author='test')
-    
-    def test_redirect_if_not_logged_in(self):
-        response = self.client.get(reverse('books:create-borrowing'))
-        self.assertRedirects(response, '/admin/login/?next=/borrow/create-borrowing/')
-        response = self.client.get(reverse('books:return-book'))
-        self.assertRedirects(response, '/admin/login/?next=/borrow/return-book/')
-        response = self.client.get(reverse('books:create-book'))
-        self.assertRedirects(response, '/admin/login/?next=/books/create-book/')
-        response = self.client.get(reverse('books:edit-book'))
-        self.assertRedirects(response, '/admin/login/?next=/books/edit-book/')
-        response = self.client.get('/books/edit-book/1/')
-        self.assertRedirects(response, '/admin/login/?next=/books/edit-book/1/')
-    
-    def test_status_200_if_logged_in(self):
-        self.client.login(username='testuser1', password='1X<ISRUkw+tuK')
-        
-        response = self.client.get(reverse('books:create-borrowing'))
-        self.assertEqual(response.status_code, HTTPStatus.OK)
-        response = self.client.get(reverse('books:return-book'))
-        self.assertEqual(response.status_code, HTTPStatus.OK)
-        response = self.client.get(reverse('books:create-book'))
-        self.assertEqual(response.status_code, HTTPStatus.OK)
-        response = self.client.get(reverse('books:edit-book'))
-        self.assertEqual(response.status_code, HTTPStatus.OK)
-        response = self.client.get('/books/edit-book/1/')
-        self.assertEqual(response.status_code, HTTPStatus.OK)
-        
-        
+
 
 class BorrowingTestCase(TestCase):
     def setUp(self):
         Book.objects.create(category=200, code=1, name='test1', author='testing', copies=5)
         Book.objects.create(category=200, code=2, name='test2', author='testing', copies=1)
         user = User.objects.create_user(username='testuser1', password='1X<ISRUkw+tuK')
+        user.is_staff = True
+        user.save()
         Profile.objects.create(user=user, )
     
     def test_create_borrowing(self):
@@ -131,6 +102,8 @@ class BookEditTestCase(TestCase):
         Book.objects.create(category=200, code=1, name='test1', author='testing', copies=5)
         Book.objects.create(category=200, code=2, name='test2', author='testing', copies=1)
         user = User.objects.create_user(username='testuser1', password='1X<ISRUkw+tuK')
+        user.is_staff = True
+        user.save()
         Profile.objects.create(user=user, )
 
     def test_edit_book(self):

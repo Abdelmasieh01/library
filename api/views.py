@@ -1,5 +1,5 @@
 from .serializers import BookSerializer, PostSerializer, ProfileSerializer, BorrowingSerializer, RecommendationSerializer, AnnouncementSerializer, AppLinkSerializer
-from books.models import Book, Borrowing, Recommendation, Announcement
+from books.models import Book, Borrowing, Recommendation, Announcement, Subcategory
 from posts.models import Post, Profile
 from django.db.models import Q,  CharField, Value
 from django.db.models.functions import Concat
@@ -26,6 +26,11 @@ class BookListAPIView(generics.ListAPIView):
 
     def get_queryset(self):
         queryset = Book.objects.all().order_by('category', 'code')
+        
+        subcategory = self.request.query_params.get('subcategory')
+        if subcategory is not None and subcategory != "":
+            queryset = Subcategory.objects.get(pk=int(subcategory)).book_set.all()
+
         search = self.request.query_params.get('search')
         if search is not None and search != "":
             search_var1 = search.replace('ا', 'أ')

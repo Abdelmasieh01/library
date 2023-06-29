@@ -2,6 +2,12 @@ from django.db import models
 from django.contrib.auth.models import User
 
 
+class Subcategory(models.Model):
+    title = models.CharField(verbose_name='الفئة الفرعية', max_length=100)
+
+    def __str__(self):
+        return self.title
+
 class Book(models.Model):
     MIX = 200
     FAMILY = 300
@@ -39,7 +45,8 @@ class Book(models.Model):
     )
 
     category = models.IntegerField(default=MIX, choices=CATEGORIES, verbose_name='الرقم العام')
-    age_category = models.IntegerField(blank=True, null=True, choices=AGE_CATEGORIES, verbose_name='الفئة العمرية')
+    #age_category = models.IntegerField(blank=True, null=True, choices=AGE_CATEGORIES, verbose_name='الفئة العمرية')
+    subcategory = models.ManyToManyField(Subcategory, verbose_name='الفئة الفرعية')
     code = models.IntegerField(verbose_name='الرقم الخاص')
     name = models.CharField(max_length=150, verbose_name='اسم الكتاب')
     author = models.CharField(max_length=150, verbose_name='المؤلف')

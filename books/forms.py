@@ -7,7 +7,7 @@ class DateInput(forms.DateInput):
 class BookForm(forms.ModelForm):
     class Meta:
         model = Book
-        fields = ['category', 'code', 'name', 'author', 'copies', 'age_category', 'image', 'link']
+        fields = ['category', 'code', 'name', 'author', 'copies', 'image', 'link']
 
 class BookUpdateForm(forms.ModelForm):
     class Meta:

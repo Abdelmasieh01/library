@@ -9,6 +9,8 @@ admin.site.site_title = 'St. Peter Library'
 class BookAdmin(admin.ModelAdmin):
     list_display = ('category', 'code', 'name', 'author', )
 
+class SubcategoryAdmin(admin.ModelAdmin):
+    list_display = ('title',)
 
 class BorrowingAdmin(admin.ModelAdmin):
     list_display = ('borrower', 'book', 'borrow_date', 'returned', 'return_date')
@@ -25,3 +27,4 @@ admin.site.register(Book, BookAdmin)
 admin.site.register(Borrowing, BorrowingAdmin)
 admin.site.register(Recommendation, RecommendationAdmin)
 admin.site.register(Announcement, AnnouncementAdmin)
+admin.site.register(Subcategory, SubcategoryAdmin)

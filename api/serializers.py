@@ -7,13 +7,15 @@ from django.conf import settings
 class BookSerializer(serializers.ModelSerializer):
     category_name = serializers.CharField(
         source='get_category_display', read_only=True)
-    age_category_name = serializers.CharField(
-        source='get_age_category_display', read_only=True)
+    subcategory = serializers.SerializerMethodField()
+
+    def get_subcategory(self, instance):
+        return instance.subcategory.values_list('title')
 
     class Meta:
         model = Book
         fields = ('id', 'category', 'code', 'name', 'author',
-                  'copies', 'available', 'category_name', 'age_category_name', 'link', 'image')
+                  'copies', 'available', 'category_name', 'subcategory', 'link', 'image')
 
 
 class PostSerializer(serializers.ModelSerializer):
@@ -55,15 +57,14 @@ class RecommendationSerializer(serializers.ModelSerializer):
     book_category = serializers.CharField(
         source='book.category', read_only=True)
     book_code = serializers.CharField(source='book.code', read_only=True)
-    book_age_category = serializers.CharField(
-        source='book.age_category', read_only=True)
     book_image = serializers.URLField(source='book.image', read_only=True)
+
+
 
     class Meta:
         model = Recommendation
         fields = ('id', 'book_name', 'title', 'book_author', 'book_category_name',
-                  'book_category', 'book_code', 'book_age_category', 'book_image', 
-                  'text', 'book', 'timestamp')
+                  'book_category', 'book_code', 'book_image', 'text', 'book', 'timestamp')
 
 class AnnouncementSerializer(serializers.ModelSerializer):
     class Meta:
