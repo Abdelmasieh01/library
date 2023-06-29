@@ -179,7 +179,7 @@ CSRF_TRUSTED_ORIGINS = [
 
 #CORS Settings
 CORS_ALLOWED_ORIGINS = [
-    'https://st-peter-library.flutterflow.app',
+    'https://stpeterlibrary.flutterflow.app',
     'http://localhost:8080',
     'http://52.45.145.20',
     'http://stpeterlibrary.crabdance.com',
