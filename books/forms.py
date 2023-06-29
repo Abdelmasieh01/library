@@ -7,12 +7,12 @@ class DateInput(forms.DateInput):
 class BookForm(forms.ModelForm):
     class Meta:
         model = Book
-        fields = ['category', 'code', 'name', 'author', 'copies', 'image', 'link']
+        fields = ['category', 'code', 'name', 'author', 'copies', 'subcategory', 'image', 'link']
 
 class BookUpdateForm(forms.ModelForm):
     class Meta:
         model = Book
-        exclude = ['category', 'code', 'available']
+        exclude = ['category', 'code', 'available', 'subcategory']
 
 '''
 class BorrowerForm(forms.ModelForm):

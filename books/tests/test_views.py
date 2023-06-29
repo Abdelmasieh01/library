@@ -133,13 +133,18 @@ class BookEditTestCase(TestCase):
             'name': 'test_test1',
             'author': 'test_testing',
             'copies': 10,
+            'image': 'https://image.link',
+            'link': 'https://book.link',
         }
         #Test OK
         response = self.client.post(reverse('books:edit-book-details', kwargs={'pk': 1}), data, follow=True)
         self.assertEqual(response.status_code, HTTPStatus.OK)
+        self.assertFalse(response.context['error'])
         book1 = Book.objects.get(category=200, code=1,)
         self.assertEqual(book1.name, 'test_test1')
         self.assertEqual(book1.author, 'test_testing')
+        self.assertEqual(book1.image, 'https://image.link')
+        self.assertEqual(book1.link, 'https://book.link')
         self.assertEqual(book1.copies, 10)
     
 class SearchTestCase(TestCase):

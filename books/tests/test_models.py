@@ -7,8 +7,7 @@ from django.contrib.auth.models import User
 
 class BookTestCase(TestCase):
     def setUp(self):
-        Book.objects.create(category=200, age_category=1,
-                            code=1, name='test', author='test_author', copies=1)
+        Book.objects.create(category=200, code=1, name='test', author='test_author', copies=1)
 
     def test_str(self):
         book = Book.objects.get(category=200, code=1)
@@ -17,8 +16,7 @@ class BookTestCase(TestCase):
 
 class BorrowingTestCase(TestCase):
     def setUp(self):
-        book = Book.objects.create(category=200, age_category=1,
-                            code=1, name='test', author='test_author', copies=1)
+        book = Book.objects.create(category=200, code=1, name='test', author='test_author', copies=1)
         self.profile = Profile.objects.create(user=User.objects.create(
             username='test_user', password='test', first_name='test', last_name='test'), )
         self.borrowing = Borrowing.objects.create(borrower=self.profile, book=book, borrow_date=datetime.today())
@@ -50,8 +48,7 @@ class BorrowingTestCase(TestCase):
 
 class RecommendationTestCase(TestCase):
     def setUp(self):
-        book = Book.objects.create(category=200, age_category=1,
-                            code=1, name='test', author='test_author', copies=1)
+        book = Book.objects.create(category=200, code=1, name='test', author='test_author', copies=1)
         self.recommendation = Recommendation.objects.create(book=book, title='test', text='test')
 
     def test_recommendation_str(self):

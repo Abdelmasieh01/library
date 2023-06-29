@@ -146,14 +146,15 @@ def edit_book_details(request, pk=2653):
                 book.name = form.cleaned_data['name']
                 book.author = form.cleaned_data['author']
                 book.copies = form.cleaned_data['copies']
+                book.image = form.cleaned_data['image']
+                book.link = form.cleaned_data['link']
+                #book.subcategory.add(form.cleaned_data['subcategory'])
                 book.available = book.copies > 0
                 book.save()
                 return redirect('books:edit-book-details', pk=book.pk)
             except:
-                error = True
-                return render(request, 'books/book_edit.html', {'form': form, 'error': error}, status=HTTPStatus.NOT_FOUND)
+                return render(request, 'books/book_edit.html', {'form': form, 'error': True}, status=HTTPStatus.NOT_FOUND)
 
     book = Book.objects.get(pk=pk)
     form = BookUpdateForm(instance=book)
-    error = False
-    return render(request, 'books/book_edit.html', {'form': form, 'error': error})
+    return render(request, 'books/book_edit.html', {'form': form, 'error': False})
