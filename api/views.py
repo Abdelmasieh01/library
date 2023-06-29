@@ -27,19 +27,19 @@ class BookListAPIView(generics.ListAPIView):
     def get_queryset(self):
         queryset = Book.objects.all().order_by('category', 'code')
         
-        subcategory = self.request.query_params.get('subcategory')
-        if subcategory is not None and subcategory != "" and subcategory != "0":
+        subcategory = self.request.query_params.get('subcategory', '')
+        if (subcategory is not None) and (subcategory != "") and (subcategory != "0"):
             queryset = Subcategory.objects.get(pk=int(subcategory)).book_set.all()
 
-        search = self.request.query_params.get('search')
-        if search is not None and search != "":
+        search = self.request.query_params.get('search', '')
+        if (search is not None) and (search != ""):
             search_var1 = search.replace('ا', 'أ')
             search_var2 = search.replace('ي', 'ى')
             search_var3 = search_var2.replace('ا', 'أ')
             queryset = queryset.filter(Q(name__icontains=search) | Q(
                 author__icontains=search) | Q(name__icontains=search_var1) | Q(author__icontains=search_var1) | Q(name__icontains=search_var2) | Q(author__icontains=search_var2) | Q(name__icontains=search_var3) | Q(author__icontains=search_var3))
 
-        category = self.request.query_params.get('category')
+        category = self.request.query_params.get('category', '')
         if (category is not None) and (category != "") and (category != " "):
             queryset = queryset.filter(category=int(category))
 
