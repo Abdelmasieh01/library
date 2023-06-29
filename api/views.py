@@ -1,4 +1,4 @@
-from .serializers import BookSerializer, PostSerializer, ProfileSerializer, BorrowingSerializer, RecommendationSerializer, AnnouncementSerializer, AppLinkSerializer
+from .serializers import BookSerializer, PostSerializer, ProfileSerializer, BorrowingSerializer, RecommendationSerializer, AnnouncementSerializer, AppLinkSerializer, SubcategorySerializer
 from books.models import Book, Borrowing, Recommendation, Announcement, Subcategory
 from posts.models import Post, Profile
 from django.db.models import Q,  CharField, Value
@@ -45,6 +45,9 @@ class BookListAPIView(generics.ListAPIView):
 
         return queryset
 
+class SubcategoryAPIView(generics.ListAPIView):
+    serializer_class = SubcategorySerializer
+    queryset = Subcategory.objects.all()
 
 class PostAPIView(generics.ListAPIView):
     pagination_class = ZeroIndexedPagePagination

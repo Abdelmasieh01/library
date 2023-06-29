@@ -1,7 +1,6 @@
 from rest_framework import serializers
-from books.models import Book, Borrowing, Recommendation, Announcement
+from books.models import Book, Borrowing, Recommendation, Announcement, Subcategory
 from posts.models import Post, Profile
-from django.conf import settings
 
 
 class BookSerializer(serializers.ModelSerializer):
@@ -10,13 +9,17 @@ class BookSerializer(serializers.ModelSerializer):
     subcategory = serializers.SerializerMethodField()
 
     def get_subcategory(self, instance):
-        return instance.subcategory.values_list('title')
-
+        return instance.subcategory.values('title')
+    
     class Meta:
         model = Book
         fields = ('id', 'category', 'code', 'name', 'author',
                   'copies', 'available', 'category_name', 'subcategory', 'link', 'image')
 
+class SubcategorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Subcategory
+        fields = '__all__'
 
 class PostSerializer(serializers.ModelSerializer):
     profile_name = serializers.CharField(source='profile.name', read_only=True)
@@ -77,3 +80,4 @@ class AppLinkSerializer(serializers.Serializer):
             'version': '1.0.0',
             'link': 'https://drive.google.com/file/d/1fq5npWfyX9o-tdZSAPsPrpdwAhEXJa1p/view?usp=drive_link',
         }
+    

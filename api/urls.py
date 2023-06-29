@@ -13,4 +13,5 @@ urlpatterns = [
     path('recommendations/', views.RecommendationAPIView.as_view(), name='recommendations'),
     path('announcements/', views.AnnouncementAPIView.as_view(), name='announcements'),
     path('app-link/', views.app_link, name='app-link'),
+    path('subcategories/', views.SubcategoryAPIView.as_view(), name='subcategories')
 ]
