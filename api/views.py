@@ -28,7 +28,7 @@ class BookListAPIView(generics.ListAPIView):
         queryset = Book.objects.all().order_by('category', 'code')
         
         subcategory = self.request.query_params.get('subcategory')
-        if subcategory is not None and subcategory != "":
+        if subcategory is not None and subcategory != "" and subcategory != "0":
             queryset = Subcategory.objects.get(pk=int(subcategory)).book_set.all()
 
         search = self.request.query_params.get('search')

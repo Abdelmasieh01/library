@@ -9,7 +9,7 @@ class BookSerializer(serializers.ModelSerializer):
     subcategory = serializers.SerializerMethodField()
 
     def get_subcategory(self, instance):
-        return instance.subcategory.values('title')
+        return instance.subcategory.values_list('title', flat=True)
     
     class Meta:
         model = Book
