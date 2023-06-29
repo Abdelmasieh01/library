@@ -47,7 +47,7 @@ class BookListAPIView(generics.ListAPIView):
 
 class SubcategoryAPIView(generics.ListAPIView):
     serializer_class = SubcategorySerializer
-    queryset = Subcategory.objects.all()
+    queryset = Subcategory.objects.all().order_by('id')
 
 class PostAPIView(generics.ListAPIView):
     pagination_class = ZeroIndexedPagePagination
