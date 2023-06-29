@@ -77,7 +77,7 @@ class AnnouncementSerializer(serializers.ModelSerializer):
 #Serializing the link to the app
 class AppLinkSerializer(serializers.Serializer):
     data = {
-            'version': '1.0.0',
-            'link': 'https://drive.google.com/file/d/1fq5npWfyX9o-tdZSAPsPrpdwAhEXJa1p/view?usp=drive_link',
+            'version': '1.0.1',
+            'link': 'https://drive.google.com/file/d/1qU4my3IsMN7xmCg3hansISv_Kpguq1eR/view?usp=sharing',
         }
     
