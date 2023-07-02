@@ -61,7 +61,7 @@ class PostCreateView(LoginRequiredMixin, CreateView):
         return reverse('books:create-post',)
 '''
 
-@login_required(login_url='/web_auth/login/')
+@login_required(login_url='/web-auth/login/')
 def create_post(request):
     if request.method == 'POST':
         form = PostForm(request.POST)

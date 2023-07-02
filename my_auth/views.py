@@ -66,12 +66,12 @@ def my_account(request):
 class CustomPasswordChangeView(PasswordChangeView):
     form_class = CustomPasswordChangeForm
     template_name = 'my_auth/change_password.html'
-    success_url = '/web_auth/my-account/change-password/'
+    success_url = '/web-auth/my-account/change-password/'
 
 class PorfilePhotoChangeView(generic.UpdateView):
     form_class = ProfileForm
     template_name = 'my_auth/change_photo.html'
-    success_url = '/web_auth/my-account/change-photo/'
+    success_url = '/web-auth/my-account/change-photo/'
 
     def get_object(self, queryset=None):
         queryset = self.request.user.profile
