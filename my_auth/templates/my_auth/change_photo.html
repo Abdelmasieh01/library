@@ -3,10 +3,13 @@
 {% block active_button %}
 <div class="container">
     <div class="row gtr-150">
-        <div class="col-6 col-6-medium" style="display: flex; justify-content: center;">
+        <div class="col-4 col-6-medium" style="display: flex; justify-content: center;">
+            <a class="button" href="{% url 'my-auth:my-account' %}">حسابي</a>
+        </div>
+        <div class="col-4 col-6-medium" style="display: flex; justify-content: center;">
             <a class="button" href="{% url 'my-auth:change-password' %}">تغيير كلمة المرور</a>
         </div>
-        <div class="col-6 col-6-medium" style="display: flex; justify-content: center;">
+        <div class="col-4 col-6-medium" style="display: flex; justify-content: center;">
             <a class="button active" href="{% url 'my-auth:change-photo' %}">تغيير الصورة الشخصية</a>
         </div>
     </div>

@@ -32,7 +32,7 @@
 		{% if user.is_staff %}
 		<li><a class="anav" href="{% url 'books:create-borrowing' %}">الاستعارة</a></li>
 		<li><a class="anav" href="{% url 'books:create-book' %}">الكتب</a></li>
-		<div class="dropdown">
+		<li class="dropdown">
 			<button class="dropbtn" style="color: white !important;">Admin
 				{% if posts_count %}
 				({{ posts_count }})
@@ -50,7 +50,7 @@
 					الاستعارات المتأخرة {{ late_count }}
 				</a>
 			</div>
-		</div>
+		</li>
 		{% endif %}
 		{% endblock %}
 		{% if user.is_authenticated %}
