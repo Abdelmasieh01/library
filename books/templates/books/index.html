@@ -12,11 +12,12 @@
 	<link href="https://fonts.googleapis.com/css?family=Tajawal:200,300,400,500,700,800,900&display=swap"
 		rel="stylesheet">
 	<link rel="stylesheet" href="{% static 'css/main.css' %}" />
+	<link rel="stylesheet" href="{% static 'css/navbar.css' %}" />
 	<noscript>
 		<link rel="stylesheet" href="{% static 'css/noscript.css' %}" />
 	</noscript>
 	{% block stylesheets %}
-	
+	<link rel="stylesheet" href="{% static 'css/carousel.css' %}" />
 	{% endblock %}
 </head>
 
@@ -31,6 +32,25 @@
 		{% if user.is_staff %}
 		<li><a class="anav" href="{% url 'books:create-borrowing' %}">الاستعارة</a></li>
 		<li><a class="anav" href="{% url 'books:create-book' %}">الكتب</a></li>
+		<div class="dropdown">
+			<button class="dropbtn" style="color: white !important;">Admin
+				{% if posts_count %}
+				({{ posts_count }})
+				{% endif %}
+				{% if late_count %}
+				({{ late_count }})
+				{% endif %}
+				<i class="fa fa-caret-down"></i>
+			</button>
+			<div class="dropdown-content">
+				<a href="#" {% if posts_count %} style="color: red;" {% endif %}>
+					مراجعة المشاركات {{ posts_count }}
+				</a>
+				<a href="#" {% if late_count %} style="color: red;" {% endif %}>
+					الاستعارات المتأخرة {{ late_count }}
+				</a>
+			</div>
+		</div>
 		{% endif %}
 		{% endblock %}
 		{% if user.is_authenticated %}
@@ -75,16 +95,34 @@
 					style="display: flex; align-items: center; justify-content: center;">
 					<form method="POST" action="{% url 'books:search' %}" style="width: 100%;">
 						{% csrf_token %}
-						<div style="display: flex; flex-direction: row;">
-							{% block search_input %}
+						{% block search_input %}
+						<div style="display: flex;">
 							<input type="text" placeholder="بحث.." name="search" style="margin-left: 5px; height: 3em;">
-							<button type="submit" style="display: inline; border-radius: 4px;"><i class="fa fa-search"></i></button>
-							{% endblock %}
 						</div>
+						<div class="form-input">
+							<label for="category">اختر الفئة: </label>
+							<select id="category" name="category">
+								{% for category in categories %}
+								<option value="{{ category.0 }}">{{ category.1 }}</option>
+								{% endfor %}
+							</select>
+						</div>
+						<div class="form-input">
+							<label for="subcategory">اختر الفئة الفرعية: </label>
+							<select id="subcategory" name="subcategory">
+								{% for subcategory in subcategories %}
+								<option value="{{ subcategory.id }}">{{ subcategory.title }}</option>
+								{% endfor %}
+							</select>
+						</div>
+						<div class="form-input form-input-btn">
+							<button type="submit" style="border-radius: 4px;"><i class="fa fa-search"></i></button>
+						</div>
+						{% endblock %}
 					</form>
 				</div>
 
-			</div>
+		</div>
 		</div>
 		{% block content %}
 		{% endblock %}
@@ -150,49 +188,26 @@
 			</header>
 			<p>بعض الاقتباسات واقتراحات القراءة المقدمة من المكتبة</p>
 			<div class="row gtr-150">
+				{% for recommendation in recommendations %}
 				<div class="col-4 col-12-medium">
-					<span class="image fit"><img src="{% static 'images/pic02.jpg' %}" alt="" /></span>
-					<h3>الخدمة الروحية والخادم الروحي</h3>
-					<p>ليست الخدمة مجرد تدريس او تعليم ، والا فكانت عملا عقليا بحتا والخادم ليس هو مجرد مدرس، ولا مجرد
-						حامل معلومات ... فما هي الخدمة؟ وما هو مركز الله في الخدمة؟ وما هي مقاييس نجاح الخدمة؟ من هو
-						الخادم الروحي؟
-						كل هذا نعرفه واكثر في كتاب: الخدمة الروحية والخادم الروحي لقداسة البابا شنودة الثالث
-					</p>
-					<!--
+					<span class="image fit">
+						<img width="350" height="350"
+						{% if recommendation.book.image %}
+						src="{{ recommendation.book.image }}" 
+						{% else %}
+						src="{% static 'images/logo1.png' %}" 
+						{% endif %}
+						alt=""/>
+					</span>
+					<h3>{{ recommendation.title }}</h3>
+					<p>{{ recommendation.text}}</p>
+					
 					<ul class="actions special">
 						<li><a href="#" class="button">المزيد</a></li>
 					</ul>
-					-->
+					
 				</div>
-				<div class="col-4 col-12-medium">
-					<span class="image fit"><img src="{% static 'images/pic03.jpg' %}" alt="" /></span>
-					<h3>تغيروا عن شكلكم</h3>
-					<p>حينما نعود ونفحص الأمثلة والنماذج البشرية التي نالت التغيير ... نجدها ليست ذي نمط واحد... منهم من
-						كان أسوأ النماذج في السلوك، ومنهم من كان على اضعف المستويات سواء الارادية او العلمية او الجسدية،
-						ومنه نتبين ان سر النجاح لا يقوم قط علي عناصر بشرية معينة او إمكانيات شخصية فريدة. وفي كتاب
-						(تغيروا عن شكلكم) يحدثنا الاب متى المسكين عن الحياة المسيحية والتي تبنى على التغيير الدائم
-						والمستمر. ودورنا ودور الله في عملية تغييرنا.
-					</p>
-					<!--
-					<ul class="actions special">
-						<li><a href="#" class="button">المزيد</a></li>
-					</ul>
-					-->
-				</div>
-				<div class="col-4 col-12-medium">
-					<span class="image fit"><img src="{% static 'images/pic04.jpg' %}" alt="" /></span>
-					<h3>التلمذة</h3>
-					<p>الخادم.. يحتاج الى مذيد من القراءة ليكون مشبعا لتلاميذه وذلك حتى لا يقدم لهم معلومات مكررة او
-						معلومات سطيحة سبق لهم معرفتها ولا شك ان الخادم العميق في معرفته يشعر تلاميذه بدسم معلوماته
-						فيقبلون عليه وعلى دروسه وهو لا يستطيع ان يتلمذهم الا اذا تتلمذ هو اولا...ما هي التلمذة؟ وما هي
-						شروطها؟ وكيف نعيش حياة التلمذة؟ كل هذا واكثر في كتاب ( التلمذة ) لمثلث الرحمات
-						البابا شنودة الثالث</p>
-					<!--
-					<ul class="actions special">
-						<li><a href="#" class="button">المزيد</a></li>
-					</ul>
-					-->
-				</div>
+				{% endfor %}
 			</div>
 		</div>
 	</section>
@@ -205,7 +220,8 @@
 			</header>
 			<p>تواصل مع مسؤول الاجتماع، او قم بإرسال رسالة واتساب عن طريق زر "اشترك"</p>
 			<ul class="actions special">
-				<li><a href="https://api.whatsapp.com/send?phone=201558345185" class="button wide primary">اشترك</a></li>
+				<li><a href="https://api.whatsapp.com/send?phone=201558345185" class="button wide primary">اشترك</a>
+				</li>
 				<li><a href="{% url 'posts:posts' %}" class="button wide">مشاركات الأعضاء</a></li>
 			</ul>
 		</div>
@@ -532,16 +548,22 @@ print 'It took ' + i + ' iterations to sort the deck.';</code></pre>
 	<!-- Footer -->
 	<section id="footer" style="display: grid; justify-content: center;">
 		<ul class="icons" style="justify-self: center;">
-			<li><a href="https://twitter.com/AbdelmasiehRA" class="icon brands alt fa-twitter"><span class="label">Twitter</span></a></li>
-			<li><a href="https://www.facebook.com/Abdelmasieh01/" class="icon brands alt fa-facebook-f"><span class="label">Facebook</span></a></li>
-			<li><a href="https://www.linkedin.com/in/abdelmasieh-baselious" class="icon brands alt fa-linkedin"><span class="label">LinkedIn</span></a></li>
-			<li><a href="https://github.com/Abdelmasieh01" class="icon brands alt fa-github"><span class="label">GitHub</span></a></li>
+			<li><a href="https://twitter.com/AbdelmasiehRA" class="icon brands alt fa-twitter"><span
+						class="label">Twitter</span></a></li>
+			<li><a href="https://www.facebook.com/Abdelmasieh01/" class="icon brands alt fa-facebook-f"><span
+						class="label">Facebook</span></a></li>
+			<li><a href="https://www.linkedin.com/in/abdelmasieh-baselious" class="icon brands alt fa-linkedin"><span
+						class="label">LinkedIn</span></a></li>
+			<li><a href="https://github.com/Abdelmasieh01" class="icon brands alt fa-github"><span
+						class="label">GitHub</span></a></li>
 		</ul>
 		<ul class="copyright">
 			<li>&copy; </li>
 			<li>صمم بواسطة: <a href="https://github.com/Abdelmasieh01">Abdelmasieh Refaat</a></li>
 		</ul>
 	</section>
+
+	
 	{% endblock %}
 	<!-- Scripts -->
 	<script src="{% static 'js/jquery.min.js' %}"></script>

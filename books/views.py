@@ -7,28 +7,57 @@ from django.utils.decorators import method_decorator
 from django.db.models import Q
 from django.views.generic import CreateView
 from http import HTTPStatus
-from .models import Book, Borrowing
-from posts.models import Profile
+from .models import Book, Borrowing, Recommendation, Subcategory, Announcement
 from .forms import BorrowingForm, ReturnForm, BookForm, BookUpdateForm
+from posts.models import Post, Profile
+from datetime import datetime, timedelta
 
 
 def index(request):
-    categories = Book.CATEGORIES
-    return render(request, 'books/index.html', {'categories': categories})
+    categories = ((0, 'الكل'),) + Book.CATEGORIES
+    subcategories = Subcategory.objects.all()
+    unapproved_posts = Post.objects.filter(approved=False)
+    late_borrowings = Borrowing.objects.filter(returned=False).filter(
+        borrow_date__lte=datetime.now().date() - timedelta(days=15))
+    
+    recommendations = Recommendation.objects.order_by('-timestamp').prefetch_related()[:3]
+    return render(request, 'books/index.html', {'categories': categories, 'subcategories': subcategories, 'recommendations': recommendations, 'posts_count': unapproved_posts.count(), 'late_count': late_borrowings.count()})
 
 
 def search(request):
-    keyword = request.POST.get('search', '')
-    keyword_var1 = keyword.replace('ا', 'أ')
-    keyword_var2 = keyword.replace('ي', 'ى')
-    keyword_var3 = keyword_var2.replace('ا', 'أ')
-    books = Book.objects.filter(Q(name__icontains=keyword) | Q(name__icontains=keyword_var1) | Q(
-        name__icontains=keyword_var2) | Q(name__icontains=keyword_var3)).order_by('category', 'code')
-    books_author = Book.objects.filter(Q(author__icontains=keyword) | Q(author__icontains=keyword_var1) | Q(
-        author__icontains=keyword_var1) | Q(author__icontains=keyword_var1)).order_by('category', 'code')
-    context = {'books': books,
-               'books_author': books_author, 'keyword': keyword}
+    categories = ((0, 'الكل'),) + Book.CATEGORIES
+    subcategories = Subcategory.objects.all()
+    
+    if request.method == 'POST':
+        keyword = request.POST.get('search', '')
+        category = request.POST.get('category', None)
+        subcategory = request.POST.get('subcategory', None)
+
+        books = books_author = Book.objects.all()
+        books_author = None
+
+        if category and (category != '0'):
+            books = books.filter(category=int(category))
+
+        if subcategory and (subcategory != '0'):
+            books = books.filter(subcategory=int(subcategory))
+
+        if keyword != '' and keyword != ' ': 
+            keyword_var1 = keyword.replace('ا', 'أ')
+            keyword_var2 = keyword.replace('ي', 'ى')
+            keyword_var3 = keyword_var2.replace('ا', 'أ')
+            books = books.filter(Q(name__icontains=keyword) | Q(name__icontains=keyword_var1) | Q(
+                name__icontains=keyword_var2) | Q(name__icontains=keyword_var3) | Q(author__icontains=keyword) | Q(author__icontains=keyword_var1) | Q(
+                author__icontains=keyword_var1) | Q(author__icontains=keyword_var1)).order_by('category', 'code')
+
+    else:
+        books = Book.objects.all().order_by('?')[:50]
+        books_author = None
+        keyword = ''
+
+    context = {'books': books, 'books_author': books_author, 'keyword': keyword, 'categories': categories, 'subcategories': subcategories, 'cat': category, 'sub': subcategory}
     return render(request, 'books/search.html', context)
+
 
 '''
 class BorrowerCreateView(LoginRequiredMixin, CreateView):
@@ -41,13 +70,14 @@ class BorrowerCreateView(LoginRequiredMixin, CreateView):
         return reverse('books:create-borrower',)
 '''
 
+
 def try_borrow(book: Book, borrower: Profile, date) -> bool:
     if book.copies > 0:
         borrowing = Borrowing(borrower=borrower, borrow_date=date, book=book)
-        book.copies -=1
+        book.copies -= 1
         book.available = borrowing.book.copies > 0
         borrower.books.add(borrowing.book)
-        book.save() 
+        book.save()
         borrowing.save()
         return True
     else:
@@ -70,16 +100,16 @@ def create_borrowing(request):
 
             borrower = form.cleaned_data['borrower']
             date = form.cleaned_data['borrow_date']
-            
+
             success = try_borrow(book, borrower, date)
             if not success:
-                return render(request, 'books/borrowing_form.html', {'form': form, 'error': True}, status=HTTPStatus.NOT_ACCEPTABLE)                
-            
+                return render(request, 'books/borrowing_form.html', {'form': form, 'error': True}, status=HTTPStatus.NOT_ACCEPTABLE)
+
             return redirect('books:create-borrowing')
         else:
             form = BorrowingForm()
             return render(request, 'books/borrowing_form.html', {'form': form, 'error': True}, status=HTTPStatus.BAD_REQUEST)
-    
+
     form = BorrowingForm()
     return render(request, 'books/borrowing_form.html', {'form': form})
 
@@ -99,11 +129,12 @@ def return_book(request):
             borrowing.book.save()
             borrowing.save()
             return redirect('books:return-book')
-        else: 
+        else:
             return render(request, 'books/return_book.html', {'form': form, 'error': True}, status=HTTPStatus.NOT_ACCEPTABLE)
-            
+
     form = ReturnForm()
     return render(request, 'books/return_book.html', {'form': form})
+
 
 @method_decorator(staff_member_required, name='dispatch')
 class BookCreateView(LoginRequiredMixin, CreateView):
@@ -148,7 +179,7 @@ def edit_book_details(request, pk=2653):
                 book.copies = form.cleaned_data['copies']
                 book.image = form.cleaned_data['image']
                 book.link = form.cleaned_data['link']
-                #book.subcategory.add(form.cleaned_data['subcategory'])
+                # book.subcategory.add(form.cleaned_data['subcategory'])
                 book.available = book.copies > 0
                 book.save()
                 return redirect('books:edit-book-details', pk=book.pk)

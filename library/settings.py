@@ -10,6 +10,7 @@ SECRET_KEY = config('SECRET_KEY')
 DEBUG = config('DEBUG') == 'True'
 
 ALLOWED_HOSTS = [
+    '127.0.0.1',
     'localhost',
     'st-peter-lib.onrender.com',
     '52.45.145.20',

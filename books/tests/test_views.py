@@ -158,6 +158,4 @@ class SearchTestCase(TestCase):
             'search': 'اخت',
         }
         response = self.client.post(reverse('books:search'), data, follow=True)
-        self.assertEqual(response.context['books'].count(), 1)
-        self.assertEqual(response.context['books_author'].count(), 1)
-
+        self.assertEqual(response.context['books'].count(), 2)

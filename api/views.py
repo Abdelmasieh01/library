@@ -29,7 +29,7 @@ class BookListAPIView(generics.ListAPIView):
         
         subcategory = self.request.query_params.get('subcategory', '')
         if (subcategory is not None) and (subcategory != "") and (subcategory != "0"):
-            queryset = Subcategory.objects.get(pk=int(subcategory)).book_set.all()
+            queryset = Subcategory.objects.get(pk=int(subcategory)).book_set.all().order_by('category', 'code')
 
         search = self.request.query_params.get('search', '')
         if (search is not None) and (search != ""):
@@ -69,7 +69,6 @@ class PostAPIView(generics.ListAPIView):
                     'profile__user__last_name',
                     output_field=CharField())).filter(Q(name__icontains=search) | Q(title__icontains=search) | Q(text__icontains=search))
         
-
         return queryset
 
 class PostCreateAPIView(generics.CreateAPIView):
@@ -80,7 +79,7 @@ class BorrowingAPIView(generics.ListAPIView):
     serializer_class = BorrowingSerializer
     permission_classes = [permissions.IsAuthenticated]
     def get_queryset(self):
-        return Borrowing.objects.filter(borrower=self.request.user.profile)
+        return Borrowing.objects.filter(borrower=self.request.user.profile).order_by('-borrow_date')
 
 class RecommendationAPIView(generics.ListAPIView):
     serializer_class = RecommendationSerializer
@@ -122,7 +121,7 @@ def my_profile(request):
         except:
             return Response(status=status.HTTP_404_NOT_FOUND)
     else:
-        return Response(status=status.HTTP_404_NOT_FOUND)
+        return Response(status=status.HTTP_401_UNAUTHORIZED)
 
 @api_view(['GET'])
 def app_link(request):

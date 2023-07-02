@@ -7,6 +7,9 @@ class Subcategory(models.Model):
 
     def __str__(self):
         return self.title
+    
+    class Meta:
+        verbose_name_plural = 'subcategories'
 
 class Book(models.Model):
     MIX = 200
@@ -35,17 +38,7 @@ class Book(models.Model):
         (VOLUMES, 'المجلدات'),
     )
 
-    AGE_CATEGORIES = (
-        (1, 'حضانة'),
-        (2, 'ابتدائي'),
-        (3, 'اعدادي'),
-        (4, 'ثانوي'),
-        (5, 'الشباب'),
-        (6, 'الأسرة'),
-    )
-
     category = models.IntegerField(default=MIX, choices=CATEGORIES, verbose_name='الرقم العام')
-    #age_category = models.IntegerField(blank=True, null=True, choices=AGE_CATEGORIES, verbose_name='الفئة العمرية')
     subcategory = models.ManyToManyField(Subcategory, verbose_name='الفئة الفرعية')
     code = models.IntegerField(verbose_name='الرقم الخاص')
     name = models.CharField(max_length=150, verbose_name='اسم الكتاب')

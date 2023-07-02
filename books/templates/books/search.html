@@ -21,10 +21,30 @@
 {% endblock %}
 
 {% block search_input %}
-<input type="text" placeholder="بحث.." name="search" style="margin-left: 5px; align-self: stretch;"
-	value="{{ keyword }}">
-<button type="submit" style="display: inline; align-self: stretch; border-radius: 4px;"><i
-		class="fa fa-search"></i></button>
+
+	<div style="display: flex;">
+		<input type="text" placeholder="بحث.." name="search" style="margin-left: 5px; align-self: stretch;"
+		value="{{ keyword }}">
+	</div>
+	<div class="form-input">
+		<label for="category">اختر الفئة: </label>
+		<select id="category" name="category">
+			{% for category in categories %}
+			<option value="{{ category.0 }}">{{ category.1 }}</option>
+			{% endfor %}
+		</select>
+	</div>
+	<div class="form-input">
+		<label for="subcategory">اختر الفئة الفرعية: </label>
+		<select id="subcategory" name="subcategory">
+			{% for subcategory in subcategories %}
+			<option value="{{ subcategory.id }}">{{ subcategory.title }}</option>
+			{% endfor %}
+		</select>
+	</div>
+	<div class="form-input form-input-btn">
+		<button type="submit" style="border-radius: 4px; height: 3em;"><i class="fa fa-search"></i></button>
+	</div>
 {% endblock %}
 
 {% block content %}
@@ -64,7 +84,7 @@
 			</tbody>
 		</table>
 	</div>
-
+	{% if books_author %}
 	<h2>نتائج البحث باسم المؤلف:</h2>
 	<div class="container mt-5 px-2">
 		<div class="table-responsive">
@@ -103,6 +123,7 @@
 		</div>
 
 	</div>
+	{% endif %}
 	{% endblock %}
 
 	{% block scripts %}

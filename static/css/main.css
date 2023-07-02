@@ -3883,3 +3883,12 @@ a.link {
 	text-decoration: none;
 }
 
+div.form-input {
+	padding-top: 15px;
+}
+
+div.form-input-btn {
+	display: flex;
+	align-items: center; 
+	justify-content: center; 
+}

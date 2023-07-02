@@ -29,7 +29,6 @@ class PostSerializer(serializers.ModelSerializer):
         fields = ('id', 'profile', 'title', 'text', 'image',
                   'profile_name', 'timestamp', 'book',)
 
-
 class ProfileSerializer(serializers.ModelSerializer):
     photo = serializers.SerializerMethodField()
 
@@ -76,8 +75,10 @@ class AnnouncementSerializer(serializers.ModelSerializer):
 
 #Serializing the link to the app
 class AppLinkSerializer(serializers.Serializer):
+    version = '1.0.1'
+    link = 'https://drive.google.com/file/d/1qU4my3IsMN7xmCg3hansISv_Kpguq1eR/view?usp=sharing'
     data = {
-            'version': '1.0.1',
-            'link': 'https://drive.google.com/file/d/1qU4my3IsMN7xmCg3hansISv_Kpguq1eR/view?usp=sharing',
+            'version': version,
+            'link': link,
         }
     
