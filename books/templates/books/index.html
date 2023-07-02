@@ -54,9 +54,10 @@
 		{% endif %}
 		{% endblock %}
 		{% if user.is_authenticated %}
-		<li style="float:left"><a class="anav" href="{% url 'my_auth:logout' %}">تسجيل الخروج</a></li>
+		<li><a class="anav" href="{% url 'my-auth:my-account' %}">حسابي</a></li>
+		<li style="float:left"><a class="anav" href="{% url 'my-auth:logout' %}">تسجيل الخروج</a></li>
 		{% else %}
-		<li style="float:left"><a class="anav" href="{% url 'my_auth:login' %}">تسجيل الدخول</a></li>
+		<li style="float:left"><a class="anav" href="{% url 'my-auth:login' %}">تسجيل الدخول</a></li>
 		{% endif %}
 	</ul>
 	{% endblock %}

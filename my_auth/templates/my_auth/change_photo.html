@@ -1,0 +1,36 @@
+{% extends 'my_auth/my_account.html' %}
+
+{% block active_button %}
+<div class="container">
+    <div class="row gtr-150">
+        <div class="col-6 col-6-medium" style="display: flex; justify-content: center;">
+            <a class="button" href="{% url 'my-auth:change-password' %}">تغيير كلمة المرور</a>
+        </div>
+        <div class="col-6 col-6-medium" style="display: flex; justify-content: center;">
+            <a class="button active" href="{% url 'my-auth:change-photo' %}">تغيير الصورة الشخصية</a>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block content %}
+<div class="container" style="margin: auto;">
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <p>
+            <label for="id_photo">الصورة:</label>
+            الصورة الحالية: 
+            {% if object.photo %}
+            <a href="{{ object.photo.url }}">{{ object.photo }}</a>
+            <input type="checkbox" name="photo-clear" id="photo-clear_id">
+            <label for="photo-clear_id">مسح</label>
+            {% else %}
+            لا يوجد. 
+            {% endif %}
+            <br>
+            تغيير:
+            <input type="file" name="photo" accept="image/*" id="id_photo">
+        </p>
+        <input type="submit" value="حفظ">
+    </form>
+</div>
+{% endblock %}

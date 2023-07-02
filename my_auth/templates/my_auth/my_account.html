@@ -1,0 +1,101 @@
+{% extends 'books/search.html' %}
+{% block stylesheets %}
+{% endblock %}
+
+{% block header %}
+{% endblock %}
+
+{% block search %}
+<div class="container">
+    <div class="row" style="display: flex; justify-content: center; align-items: center;">
+        <div class="col-6" style="display: flex; justify-content: center;">
+            <img src="/media/{{ request.user.profile.photo }}" width="250" height="250" style="border-radius: 50%;">
+        </div>
+    </div>
+    <div class="row " style="display: flex; align-items: center;">
+        <div class="col-6 col-6-medium" style="display: flex; justify-content: center;">
+            <h2>معلومات الحساب: </h2>
+        </div>
+    </div>
+    <div class="row" style="display: flex; justify-content: center;">
+        <div class="col-6 col-12-medium" style="display: flex; justify-content: center;">
+            <h4>الاسم: {{ request.user.profile.name }}</h4>
+        </div>
+        <div class="col-6 col-12-medium" style="display: flex; justify-content: center;">
+            <h4>البريد الإلكتروني: {{ request.user.email }}</h4>
+        </div>
+    </div>
+</div>
+
+
+{% if borrowings %}
+<div class="container mt-5 px-2">
+    <h2>الاستعارات: </h2>
+	<div class="table-responsive">
+		<table class="table table-responsive">
+			<thead>
+				<tr class="bg-light">
+					<th scope="col" width="40%" style="text-align: center;">الاسم</th>
+					<th scope="col" width="25%" style="text-align: center;">تاريخ الاستعارة</th>
+					<th scope="col" width="25%" style="text-align: center;">تاريخ الإرجاع</th>
+					<th scope="col" width="10%" style="text-align: center;">تم الإرجاع</th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for borrowing in borrowings %}
+				<tr>
+					<td style="text-align: center;">{{ borrowing.book.name }}</td>
+					<td style="text-align: center;">{{ borrowing.borrow_date|date:"d/m/Y" }}</td>
+                    {% if borrowing.return_date %}
+					<td style="text-align: center;">{{ borrowing.return_date|date:"d/m/Y" }}</td>
+                    {% else %}
+                    <td style="text-align: center;">غير محدد</td>
+                    {% endif %}
+					{% if borrowing.returned %}
+					<td style="text-align: center;"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="green" class="bi bi-check-circle-fill" viewBox="0 0 16 16">
+						<path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/>
+					  </svg></td>
+					{% else %}
+					<td style="text-align: center;"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="red" class="bi bi-x-circle-fill" viewBox="0 0 16 16">
+						<path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293 5.354 4.646z"/>
+					  </svg></td>
+					{% endif %}
+				</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+	</div>
+</div>
+{% endif %}
+
+<!-- Buttons -->
+{% block active_button %}
+<div class="container">
+    <div class="row gtr-150">
+        <div class="col-6 col-6-medium" style="display: flex; justify-content: center;">
+            <a class="button" href="{% url 'my-auth:change-password' %}">تغيير كلمة المرور</a>
+        </div>
+        <div class="col-6 col-6-medium" style="display: flex; justify-content: center;">
+            <a class="button" href="{% url 'my-auth:change-photo' %}">تغيير الصورة الشخصية</a>
+        </div>
+    </div>
+</div>
+{% endblock %}
+<br/>
+{% block content %}
+{% endblock %}
+{% endblock %}
+
+{% block active %}
+<li><a class="anav" href="{% url 'books:index' %}">الرئيسية</a></li>
+<li><a class="anav" href="{% url 'books:search' %}">البحث</a></li>
+<li><a class="anav" href="{% url 'posts:posts' %}">المشاركات</a></li>
+<li><a class="anav" href="{% url 'books:create-borrowing' %}">الاستعارة</a></li>
+<li><a class="anav" href="{% url 'books:create-book' %}">الكتب</a></li>
+{% endblock %}
+
+{% block scripts %}
+{% endblock %}
+
+{% block index-only %}
+{% endblock %}
