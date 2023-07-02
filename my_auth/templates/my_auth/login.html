@@ -5,7 +5,7 @@
 <li><a class="anav" href="{% url 'books:search' %}">البحث</a></li>
 <li><a class="anav" href="{% url 'posts:posts' %}">المشاركات</a></li>
 {% if user.is_staff %}
-<li><a class="anav" href="{% url 'books:create-borrower' %}">الاستعارة</a></li>
+<li><a class="anav" href="{% url 'books:create-borrowing' %}">الاستعارة</a></li>
 <li><a class="anav" href="{% url 'books:create-book' %}">الكتب</a></li>
 {% endif %}
 {% endblock %}
@@ -13,6 +13,7 @@
 {% block search %}
 <div class="container">
     <div class="row" style="display: flex; justify-content: center;">
+        {% block form %}
         <form method="post">{% csrf_token %}
             {{ form.as_p }}
             {% if error %}
@@ -20,6 +21,7 @@
             {% endif %}
             <input type="submit" value="تسجيل الدخول">
         </form>
+        {% endblock %}
     </div>
 </div>
 {% endblock %}

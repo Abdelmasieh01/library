@@ -1,0 +1,39 @@
+{% extends "books/borrowing_form.html" %}
+
+{% block search %}
+<div class="container">
+    <div class="row gtr-150">
+        <div class="col-4 col-12-medium" style="display: flex; justify-content: center;">
+            <a class="button active" href="{% url 'my_auth:create-profile' %}">إضافة عضو جديد</a>
+        </div>
+        <div class="col-4 col-12-medium" style="display: flex; justify-content: center;">
+            <a class="button" href="{% url 'books:create-borrowing' %}">إضافة طلب استعارة جديد</a>
+        </div>
+        <div class="col-4 col-12-medium" style="display: flex; justify-content: center;">
+            <a class="button" href="{% url 'books:return-book' %}">إرجاع كتاب</a>
+        </div>
+    </div>
+</div>
+<br />
+{% block content %}
+<div class="container">
+    <div class="row" style="display: flex; justify-content: center;">
+        <div class="col">
+            {% if success %}
+            <h2 style="color:green;">تم تسجيل العضو بنجاح</h2>
+            {% endif %}
+            {% if error %}
+            <h2 style="color:red;">يوجد خطأ في البيانات</h2>
+            {% endif %}
+
+            <form method="post" enctype="multipart/form-data">{% csrf_token %}
+                {{ user_form.as_p }}
+                <br>
+                {{ profile_form.as_p }}
+                <input type="submit" value="حفظ">
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% endblock %}
