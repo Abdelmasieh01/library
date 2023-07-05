@@ -17,7 +17,6 @@
 		<link rel="stylesheet" href="{% static 'css/noscript.css' %}" />
 	</noscript>
 	{% block stylesheets %}
-	<link rel="stylesheet" href="{% static 'css/carousel.css' %}" />
 	{% endblock %}
 </head>
 
@@ -123,7 +122,7 @@
 					</form>
 				</div>
 
-		</div>
+			</div>
 		</div>
 		{% block content %}
 		{% endblock %}
@@ -162,7 +161,7 @@
 								</tr>
 							</thead>
 							<tbody>
-								{% for category in categories %}
+								{% for category in categories|slice:'1:' %}
 								<tr>
 									<td style="text-align: center;">{{ category.0 }}</td>
 									<td style="text-align: center;">{{ category.1 }}</td>
@@ -192,21 +191,17 @@
 				{% for recommendation in recommendations %}
 				<div class="col-4 col-12-medium">
 					<span class="image fit">
-						<img width="350" height="350"
-						{% if recommendation.book.image %}
-						src="{{ recommendation.book.image }}" 
-						{% else %}
-						src="{% static 'images/logo1.png' %}" 
-						{% endif %}
-						alt=""/>
+						<img width="350" height="350" {% if recommendation.book.image %}
+							src="{{ recommendation.book.image }}" {% else %} src="{% static 'images/logo1.png' %}" 
+							{% endif %} alt="" />
 					</span>
 					<h3>{{ recommendation.title }}</h3>
 					<p>{{ recommendation.text}}</p>
-					
+
 					<ul class="actions special">
 						<li><a href="#" class="button">المزيد</a></li>
 					</ul>
-					
+
 				</div>
 				{% endfor %}
 			</div>
@@ -564,7 +559,7 @@ print 'It took ' + i + ' iterations to sort the deck.';</code></pre>
 		</ul>
 	</section>
 
-	
+
 	{% endblock %}
 	<!-- Scripts -->
 	<script src="{% static 'js/jquery.min.js' %}"></script>

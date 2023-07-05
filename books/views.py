@@ -19,9 +19,9 @@ def index(request):
     unapproved_posts = Post.objects.filter(approved=False)
     late_borrowings = Borrowing.objects.filter(returned=False).filter(
         borrow_date__lte=datetime.now().date() - timedelta(days=15))
-    
     recommendations = Recommendation.objects.order_by('-timestamp').prefetch_related()[:3]
-    return render(request, 'books/index.html', {'categories': categories, 'subcategories': subcategories, 'recommendations': recommendations, 'posts_count': unapproved_posts.count(), 'late_count': late_borrowings.count()})
+    announcements = Announcement.objects.filter(show=True)[:5]
+    return render(request, 'books/index.html', {'categories': categories, 'subcategories': subcategories, 'announcements':announcements, 'recommendations': recommendations, 'posts_count': unapproved_posts.count(), 'late_count': late_borrowings.count()})
 
 
 def search(request):
@@ -55,7 +55,7 @@ def search(request):
         books_author = None
         keyword = ''
 
-    context = {'books': books, 'books_author': books_author, 'keyword': keyword, 'categories': categories, 'subcategories': subcategories, 'cat': category, 'sub': subcategory}
+    context = {'books': books, 'books_author': books_author, 'keyword': keyword, 'categories': categories, 'subcategories': subcategories}
     return render(request, 'books/search.html', context)
 
 
