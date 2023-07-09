@@ -76,7 +76,7 @@ class AnnouncementSerializer(serializers.ModelSerializer):
 #Serializing the link to the app
 class AppLinkSerializer(serializers.Serializer):
     version = '1.0.1'
-    link = 'https://drive.google.com/file/d/1qU4my3IsMN7xmCg3hansISv_Kpguq1eR/view?usp=sharing'
+    link = 'https://www.mediafire.com/file/u7kvv7dr4i61rje/St+Peter+Library.apk/file'
     data = {
             'version': version,
             'link': link,
