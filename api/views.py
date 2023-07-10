@@ -25,7 +25,7 @@ class BookListAPIView(generics.ListAPIView):
     pagination_class = ZeroIndexedPagePagination
 
     def get_queryset(self):
-        queryset = Book.objects.all().order_by('category', 'code').prefetch_related('subcategory')
+        queryset = Book.objects.all().order_by('category', 'code')
         
         subcategory = self.request.query_params.get('subcategory', '')
         if (subcategory is not None) and (subcategory != "") and (subcategory != "0"):
