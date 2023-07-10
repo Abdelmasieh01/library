@@ -33,6 +33,8 @@ INSTALLED_APPS = [
     'dj_rest_auth',
     #CORS headers for APIs
     "corsheaders",
+    #anymail_app
+    'anymail',
     #django apps
     'django.contrib.admin',
     'django.contrib.auth',
@@ -185,3 +187,12 @@ CORS_ALLOWED_ORIGINS = [
     'http://52.45.145.20',
     'http://stpeterlibrary.crabdance.com',
 ]
+
+EMAIL_BACKEND = "anymail.backends.sendinblue.EmailBackend"
+DEFAULT_FROM_EMAIL = "stpeterlibrary39@gmail.com"
+ANYMAIL = {
+    "SENDINBLUE_API_KEY": config('API_KEY'),
+    "SEND_DEFAULTS": {
+        "tags": ["stpeterlibrary"]
+    },
+}

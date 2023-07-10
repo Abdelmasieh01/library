@@ -1,0 +1,8 @@
+{% extends "admin/change_list.html" %}
+
+{% block object-tools-items %}
+    {{ block.super }}
+    <li>
+        <a href="?approved__exact=False" class="button" title="Filter by Unapproved">المشاركات الغير مقبولة</a>
+    </li>
+{% endblock %}

@@ -42,10 +42,10 @@
 				<i class="fa fa-caret-down"></i>
 			</button>
 			<div class="dropdown-content">
-				<a href="#" {% if posts_count %} style="color: red;" {% endif %}>
+				<a href="/admin/posts/post/?approved__exact=False" {% if posts_count %} style="color: red;" {% endif %}>
 					مراجعة المشاركات {{ posts_count }}
 				</a>
-				<a href="#" {% if late_count %} style="color: red;" {% endif %}>
+				<a href="/admin/books/borrowing/?return_filter=late" {% if late_count %} style="color: red;" {% endif %}>
 					الاستعارات المتأخرة {{ late_count }}
 				</a>
 			</div>
