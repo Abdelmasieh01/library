@@ -25,7 +25,7 @@ class BookListAPIView(generics.ListAPIView):
     pagination_class = ZeroIndexedPagePagination
 
     def get_queryset(self):
-        queryset = Book.objects.all().order_by('category', 'code')
+        queryset = Book.objects.all().order_by('category', 'code').prefetch_related('subcategory')
         
         subcategory = self.request.query_params.get('subcategory', '')
         if (subcategory is not None) and (subcategory != "") and (subcategory != "0"):
@@ -54,7 +54,7 @@ class PostAPIView(generics.ListAPIView):
     serializer_class = PostSerializer
 
     def get_queryset(self):
-        queryset = Post.objects.filter(approved=True).order_by('-timestamp')
+        queryset = Post.objects.filter(approved=True).order_by('-timestamp').prefetch_related('profile')
         search = self.request.query_params.get('search')
         book = self.request.query_params.get('book')
 
@@ -79,11 +79,11 @@ class BorrowingAPIView(generics.ListAPIView):
     serializer_class = BorrowingSerializer
     permission_classes = [permissions.IsAuthenticated]
     def get_queryset(self):
-        return Borrowing.objects.filter(borrower=self.request.user.profile).order_by('-borrow_date')
+        return Borrowing.objects.filter(borrower=self.request.user.profile).order_by('-borrow_date').prefetch_related('borrower', 'book')
 
 class RecommendationAPIView(generics.ListAPIView):
     serializer_class = RecommendationSerializer
-    queryset = Recommendation.objects.all().order_by('-timestamp')
+    queryset = Recommendation.objects.all().order_by('-timestamp').prefetch_related('book')
 
 class AnnouncementAPIView(generics.ListAPIView):
     serializer_class = AnnouncementSerializer
