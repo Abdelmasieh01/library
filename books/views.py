@@ -7,6 +7,7 @@ from django.utils.decorators import method_decorator
 from django.db.models import Q
 from django.views.generic import CreateView
 from django.core.mail import send_mail
+from django.views.decorators.csrf import csrf_exempt
 from http import HTTPStatus
 from .models import Book, Borrowing, Recommendation, Subcategory, Announcement
 from .forms import BorrowingForm, ReturnForm, BookForm, BookUpdateForm
@@ -191,6 +192,7 @@ def edit_book_details(request, pk=2653):
     form = BookUpdateForm(instance=book)
     return render(request, 'books/book_edit.html', {'form': form, 'error': False})
 
+@csrf_exempt
 def send_email_to_instatech(request):
     if request.method == 'POST':
         name = request.POST.get('name', '')
