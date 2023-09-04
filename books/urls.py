@@ -12,4 +12,5 @@ urlpatterns = [
     path('books/create-book/', views.BookCreateView.as_view(), name='create-book'),
     path('books/edit-book/', views.edit_book, name='edit-book'),
     path('books/edit-book/<int:pk>/', views.edit_book_details, name='edit-book-details'),
+    path('email-to-instatech/', views.send_email_to_instatech, name='email-to-instatech'),
 ]

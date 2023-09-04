@@ -6,6 +6,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.utils.decorators import method_decorator
 from django.db.models import Q
 from django.views.generic import CreateView
+from django.core.mail import send_mail
 from http import HTTPStatus
 from .models import Book, Borrowing, Recommendation, Subcategory, Announcement
 from .forms import BorrowingForm, ReturnForm, BookForm, BookUpdateForm
@@ -189,3 +190,27 @@ def edit_book_details(request, pk=2653):
     book = Book.objects.get(pk=pk)
     form = BookUpdateForm(instance=book)
     return render(request, 'books/book_edit.html', {'form': form, 'error': False})
+
+def send_email_to_instatech(request):
+    if request.method == 'POST':
+        name = request.POST.get('name', '')
+        email = request.POST.get('email', '')
+        phone = request.POST.get('phone', '')
+        message = request.POST.get('message', '')
+        try:
+            send_mail(
+                subject=f'Email From: {name}',
+                message=f'''
+                Name: {name}
+                Email: {email}
+                Phone: {phone}
+                Message: {message}
+                ''',
+                from_email= 'instaTech Email <stpeterlibrary39@gmail.com>',
+                recipient_list=['instatech36@gmail.com']
+            )
+            return redirect('https://instatech36.github.io/success/')
+        except:
+            return redirect('https://instatech36.github.io/error/')
+    else:
+        return redirect('https://instatech36.github.io/')
