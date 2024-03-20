@@ -15,7 +15,8 @@ ALLOWED_HOSTS = [
     'st-peter-lib.onrender.com',
     '52.45.145.20',
     'stpeterlibrary.crabdance.com',
-]
+    'stpeterlib.is-app.tech',
+]   
 
 
 # Application definition
@@ -177,7 +178,9 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 CSRF_TRUSTED_ORIGINS = [
     'https://st-peter-lib.onrender.com',
     'http://52.45.145.20',
-    'http://stpeterlibrary.crabdance.com/',
+    'http://stpeterlibrary.crabdance.com',
+    'http://stpeterlib.is-app.tech',
+    'https://stpeterlib.is-app.tech',
 ]
 
 #CORS Settings
@@ -186,6 +189,8 @@ CORS_ALLOWED_ORIGINS = [
     'http://localhost:8080',
     'http://52.45.145.20',
     'http://stpeterlibrary.crabdance.com',
+    'https://stpeterlib.is-app.tech',
+    'http://stpeterlib.is-app.tech',
 ]
 
 EMAIL_BACKEND = "anymail.backends.sendinblue.EmailBackend"
