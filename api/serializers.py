@@ -33,7 +33,7 @@ class ProfileSerializer(serializers.ModelSerializer):
     photo = serializers.SerializerMethodField()
 
     def get_photo(self, instance):
-        return f'https://stpeterlibrary.crabdance.com/media/{instance.photo}' 
+        return f'https://stpeterlib.is-app.tech/media/{instance.photo}' 
 
     class Meta:
         model = Profile
